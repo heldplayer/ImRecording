@@ -1,0 +1,17 @@
+[
+{
+  "modid" : "ImRecording",
+  "name" : "The \"I'm Recording\" Mod",
+  "version" : "1.03.02.01",
+  "credits" : "The forgecraft server for inspiration to make this mod.",
+  "authors": [
+    "heldplayer"
+  ],
+  "description": "Adds icons to the Minecraft GUI that displays if players on a server are recording if they tell their client they are.",
+  "updateUrl" : "http://www.minecraftforge.net/forum/index.php/topic,2553.0.html/",
+  "url" : "http://www.minecraftforge.net/forum/index.php/topic,2553.0.html",
+  "parent" : "",
+  "screenshots": [
+  ]
+}
+]
