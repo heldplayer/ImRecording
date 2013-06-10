@@ -11,7 +11,6 @@ import me.heldplayer.mods.recording.common.ScreenLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.gui.ScaledResolution;
 
 import org.lwjgl.opengl.GL11;
@@ -30,11 +29,6 @@ public class GuiOverlay extends Gui {
     }
 
     public void tick() {
-        Minecraft mc = Minecraft.getMinecraft();
-
-        if (mc.currentScreen != null && mc.theWorld != null)
-            return;
-
         ArrayList<RecordingInfo> players = CommonProxy.recordingPlayers;
 
         for (int i = 0; i < players.size(); i++) {
@@ -60,8 +54,7 @@ public class GuiOverlay extends Gui {
     }
 
     public void drawScreen(Minecraft mc, ScaledResolution resolution) {
-        if (mc.currentScreen != null && mc.theWorld != null && !(mc.currentScreen instanceof GuiIngameMenu))
-            return;
+        GL11.glEnable(GL11.GL_BLEND);
 
         int width = resolution.getScaledWidth();
         int height = resolution.getScaledHeight();
