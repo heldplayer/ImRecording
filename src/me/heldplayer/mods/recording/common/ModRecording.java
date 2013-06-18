@@ -42,11 +42,14 @@ public class ModRecording {
     // HeldCore Objects
     private UsageReporter reporter;
     private Config config;
-    public static ConfigValue<Boolean> silentUpdates;
     public static ConfigValue<ScreenLocation> screenLocation;
     public static ConfigValue<Boolean> chatMessages;
     public static ConfigValue<Boolean> lockOverlay;
     public static ConfigValue<Boolean> instantHide;
+    // Config values for HeldCore
+    public static ConfigValue<Boolean> silentUpdates;
+    public static ConfigValue<Boolean> optOut;
+    public static ConfigValue<String> modPack;
 
     @PreInit
     public void preInit(FMLPreInitializationEvent event) {
@@ -58,22 +61,26 @@ public class ModRecording {
 
         Objects.log = event.getModLog();
 
-        reporter = new UsageReporter(Objects.MOD_ID, Objects.MOD_VERSION, FMLCommonHandler.instance().getSide(), file);
-
         // Config
-        silentUpdates = new ConfigValue<Boolean>("silentUpdates", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Set this to true to hide update messages in the main menu");
         screenLocation = new ConfigValue<ScreenLocation>("screenLocation", Configuration.CATEGORY_GENERAL, Side.CLIENT, ScreenLocation.TopRight, "Determines the location the GUI part of this mod is located in");
         chatMessages = new ConfigValue<Boolean>("chatMessages", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Set this to true to broadcast a chat message to every player when a player starts recording");
         lockOverlay = new ConfigValue<Boolean>("lockOverlay", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Set this to true to disable being able to change recording state when the overlay is hidden");
         instantHide = new ConfigValue<Boolean>("instantHide", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.FALSE, "Set this to true to instantly hide the overlay instead of fading out slowly when toggling the GUI");
+        silentUpdates = new ConfigValue<Boolean>("silentUpdates", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Set this to true to hide update messages in the main menu");
+        optOut = new ConfigValue<Boolean>("optOut", Configuration.CATEGORY_GENERAL, null, Boolean.FALSE, "Set this to true to opt-out from statistics gathering. If you are configuring this mod for a modpack, please leave it set to false");
+        modPack = new ConfigValue<String>("modPack", Configuration.CATEGORY_GENERAL, null, "", "If this mod is running in a modpack, please set this config value to the name of the modpack");
         config = new Config(event.getSuggestedConfigurationFile());
-        config.addConfigKey(silentUpdates);
         config.addConfigKey(screenLocation);
         config.addConfigKey(chatMessages);
         config.addConfigKey(lockOverlay);
         config.addConfigKey(instantHide);
+        config.addConfigKey(silentUpdates);
+        config.addConfigKey(optOut);
+        config.addConfigKey(modPack);
         config.load();
         config.saveOnChange();
+
+        reporter = new UsageReporter(Objects.MOD_ID, Objects.MOD_VERSION, modPack.getValue(), FMLCommonHandler.instance().getSide(), file);
 
         Updater.initializeUpdater(Objects.MOD_ID, Objects.MOD_VERSION, silentUpdates.getValue());
 
@@ -87,10 +94,12 @@ public class ModRecording {
 
     @PostInit
     public void postInit(FMLPostInitializationEvent event) {
-        Thread thread = new Thread(reporter, Objects.MOD_ID + " usage reporter");
-        thread.setDaemon(true);
-        thread.setPriority(Thread.MIN_PRIORITY);
-        thread.start();
+        if (optOut.getValue()) {
+            Thread thread = new Thread(reporter, Objects.MOD_ID + " usage reporter");
+            thread.setDaemon(true);
+            thread.setPriority(Thread.MIN_PRIORITY);
+            thread.start();
+        }
 
         proxy.postInit(event);
     }
