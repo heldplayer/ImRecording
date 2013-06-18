@@ -35,6 +35,6 @@ public enum ChatColor {
 
     @Override
     public String toString() {
-        return COLOR_CHAR + "" + code;
+        return COLOR_CHAR + "" + this.code;
     }
 }

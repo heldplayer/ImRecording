@@ -35,12 +35,14 @@ public class KeyHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.
 
     @Override
     public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat) {
-        if (!tickEnd)
+        if (!tickEnd) {
             return;
+        }
         Minecraft mc = Minecraft.getMinecraft();
 
-        if (mc.currentScreen != null && mc.theWorld != null && !(mc.currentScreen instanceof GuiMainMenu))
+        if (mc.currentScreen != null && mc.theWorld != null && !(mc.currentScreen instanceof GuiMainMenu)) {
             return;
+        }
 
         if (kb == overlayToggle) {
             ClientProxy.overlayEnabled = !ClientProxy.overlayEnabled;
@@ -54,8 +56,9 @@ public class KeyHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.
             }
         }
 
-        if (!ClientProxy.overlayEnabled && ModRecording.lockOverlay.getValue())
+        if (!ClientProxy.overlayEnabled && ModRecording.lockOverlay.getValue()) {
             return;
+        }
 
         if (!isRepeat) {
             if (kb == recordingToggle) {
@@ -87,15 +90,18 @@ public class KeyHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.
 
     @Override
     public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
-        if (!tickEnd)
+        if (!tickEnd) {
             return;
+        }
         Minecraft mc = Minecraft.getMinecraft();
 
-        if (mc.currentScreen != null && mc.theWorld != null && !(mc.currentScreen instanceof GuiMainMenu))
+        if (mc.currentScreen != null && mc.theWorld != null && !(mc.currentScreen instanceof GuiMainMenu)) {
             return;
+        }
 
-        if (!ClientProxy.overlayEnabled && ModRecording.lockOverlay.getValue())
+        if (!ClientProxy.overlayEnabled && ModRecording.lockOverlay.getValue()) {
             return;
+        }
 
         if (kb == pausedToggle) {
             if (kb.pressTime < 10) {

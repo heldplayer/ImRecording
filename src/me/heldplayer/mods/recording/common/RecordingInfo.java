@@ -1,8 +1,8 @@
 
 package me.heldplayer.mods.recording.common;
 
-import net.minecraft.util.MathHelper;
 import me.heldplayer.mods.recording.client.ClientProxy;
+import net.minecraft.util.MathHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -33,19 +33,24 @@ public class RecordingInfo {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (this.getClass() != obj.getClass()) {
             return false;
+        }
         RecordingInfo other = (RecordingInfo) obj;
         if (this.name == null) {
-            if (other.name != null)
+            if (other.name != null) {
                 return false;
+            }
         }
-        else if (!this.name.equals(other.name))
+        else if (!this.name.equals(other.name)) {
             return false;
+        }
         return true;
     }
 
@@ -68,7 +73,7 @@ public class RecordingInfo {
         int opacity = 0xFF;
 
         if (!ClientProxy.overlayEnabled) {
-            opacity = (int) (255.0F - (((float) displayTime) * 255.0F / 205.0F));
+            opacity = (int) (255.0F - (((float) this.displayTime) * 255.0F / 205.0F));
         }
 
         if (this.state == (byte) 1) {
@@ -78,7 +83,7 @@ public class RecordingInfo {
             return 0x0080FF | (opacity << 24);
         }
         if (this.state == (byte) 3) {
-            opacity = 0x90 + (int) MathHelper.abs(0x60 * MathHelper.sin((float) displayTime / 6.28F));
+            opacity = 0x90 + (int) MathHelper.abs(0x60 * MathHelper.sin((float) this.displayTime / 6.28F));
             if (!ClientProxy.overlayEnabled) {
                 if (this.displayTime < 200) {
                     opacity *= (float) (205 - this.displayTime) / 205.0F;
@@ -105,7 +110,7 @@ public class RecordingInfo {
     }
 
     public String getRecordingString(boolean onConnect) {
-        String base = this.getChatColor() + "" + ChatColor.ITALIC + name + ChatColor.GRAY + "" + ChatColor.ITALIC + " ";
+        String base = this.getChatColor() + "" + ChatColor.ITALIC + this.name + ChatColor.GRAY + "" + ChatColor.ITALIC + " ";
 
         if (onConnect) {
             if (this.state == (byte) 1) {

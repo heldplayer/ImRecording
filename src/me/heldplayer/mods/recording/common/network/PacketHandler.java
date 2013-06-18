@@ -76,8 +76,9 @@ public class PacketHandler implements IPacketHandler {
                 }
             }
 
-            if (localInfo != null)
+            if (localInfo != null) {
                 ModRecording.instance.sendPlayerToPlayers(localInfo);
+            }
         break;
         case 1:
             int nameLength = dat.readInt();

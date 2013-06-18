@@ -85,8 +85,8 @@ public class GuiOverlay extends Gui {
             }
 
             if (alignRight) {
-                if (width - 1 - font.getStringWidth(playerArray[i].name) < x) {
-                    x = width - 1 - font.getStringWidth(playerArray[i].name);
+                if (width - 1 - this.font.getStringWidth(playerArray[i].name) < x) {
+                    x = width - 1 - this.font.getStringWidth(playerArray[i].name);
                 }
             }
         }
@@ -99,9 +99,9 @@ public class GuiOverlay extends Gui {
 
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, ((float) ((color >> 24) & 0xFF) / 255.0F));
 
-                drawTexturedModalRect(x - 9, y, player.getState() * 16, 0, 16, 16);
+                this.drawTexturedModalRect(x - 9, y, player.getState() * 16, 0, 16, 16);
 
-                font.drawStringWithShadow(player.name, x, y, color);
+                this.font.drawStringWithShadow(player.name, x, y, color);
 
                 if (alignBottom) {
                     y -= 9;
@@ -115,8 +115,9 @@ public class GuiOverlay extends Gui {
         if (Minecraft.getMinecraft().theWorld == null) {
             RecordingInfo player = ClientProxy.playerInfo;
 
-            if (player.getState() == 0)
+            if (player.getState() == 0) {
                 return;
+            }
 
             int color = player.getColor();
 
@@ -124,12 +125,12 @@ public class GuiOverlay extends Gui {
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, ((float) ((color >> 24) & 0xFF) / 255.0F));
 
-            x = alignRight ? width - 1 - font.getStringWidth(player.name) : 10;
+            x = alignRight ? width - 1 - this.font.getStringWidth(player.name) : 10;
             y = alignBottom ? height - 10 : 1;
 
-            drawTexturedModalRect(x - 9, y, player.getState() * 16, 0, 16, 16);
+            this.drawTexturedModalRect(x - 9, y, player.getState() * 16, 0, 16, 16);
 
-            font.drawStringWithShadow(player.name, x, y, color);
+            this.font.drawStringWithShadow(player.name, x, y, color);
         }
     }
 }

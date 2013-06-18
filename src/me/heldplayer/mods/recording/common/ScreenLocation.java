@@ -20,9 +20,11 @@ public enum ScreenLocation implements IConfigurable {
     }
 
     public static ScreenLocation fromString(String name) {
-        for (ScreenLocation location : values())
-            if (location.name.equalsIgnoreCase(name))
+        for (ScreenLocation location : values()) {
+            if (location.name.equalsIgnoreCase(name)) {
                 return location;
+            }
+        }
 
         return null;
     }
