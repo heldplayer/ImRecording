@@ -1,5 +1,5 @@
 
-package me.heldplayer.mods.recording.common;
+package me.heldplayer.mods.recording;
 
 import java.util.logging.Logger;
 

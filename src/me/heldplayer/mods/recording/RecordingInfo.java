@@ -1,5 +1,5 @@
 
-package me.heldplayer.mods.recording.common;
+package me.heldplayer.mods.recording;
 
 import me.heldplayer.mods.recording.client.ClientProxy;
 import net.minecraft.util.MathHelper;

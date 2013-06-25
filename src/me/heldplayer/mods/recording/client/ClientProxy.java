@@ -1,10 +1,10 @@
 
 package me.heldplayer.mods.recording.client;
 
+import me.heldplayer.mods.recording.CommonProxy;
+import me.heldplayer.mods.recording.ModRecording;
+import me.heldplayer.mods.recording.RecordingInfo;
 import me.heldplayer.mods.recording.client.gui.GuiOverlay;
-import me.heldplayer.mods.recording.common.CommonProxy;
-import me.heldplayer.mods.recording.common.ModRecording;
-import me.heldplayer.mods.recording.common.RecordingInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.NetHandler;

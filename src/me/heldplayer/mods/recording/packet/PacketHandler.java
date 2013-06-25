@@ -1,7 +1,7 @@
 
-package me.heldplayer.mods.recording.common.packet;
+package me.heldplayer.mods.recording.packet;
 
-import me.heldplayer.mods.recording.common.Objects;
+import me.heldplayer.mods.recording.Objects;
 
 public class PacketHandler extends me.heldplayer.util.HeldCore.packet.PacketHandler {
 

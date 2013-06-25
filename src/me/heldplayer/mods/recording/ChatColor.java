@@ -1,5 +1,5 @@
 
-package me.heldplayer.mods.recording.common;
+package me.heldplayer.mods.recording;
 
 public enum ChatColor {
     BLACK('0'),

@@ -1,12 +1,12 @@
 
-package me.heldplayer.mods.recording.common.packet;
+package me.heldplayer.mods.recording.packet;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import me.heldplayer.mods.recording.common.CommonProxy;
-import me.heldplayer.mods.recording.common.RecordingInfo;
+import me.heldplayer.mods.recording.CommonProxy;
+import me.heldplayer.mods.recording.RecordingInfo;
 import me.heldplayer.util.HeldCore.packet.HeldCorePacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;

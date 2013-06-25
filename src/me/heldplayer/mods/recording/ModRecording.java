@@ -1,14 +1,14 @@
 
-package me.heldplayer.mods.recording.common;
+package me.heldplayer.mods.recording;
 
 import java.io.File;
 import java.util.List;
 
 import me.heldplayer.mods.recording.client.ClientProxy;
-import me.heldplayer.mods.recording.common.packet.Packet1SetState;
-import me.heldplayer.mods.recording.common.packet.Packet2UpdatePlayerState;
-import me.heldplayer.mods.recording.common.packet.Packet3BroadcastRecorders;
-import me.heldplayer.mods.recording.common.packet.PacketHandler;
+import me.heldplayer.mods.recording.packet.Packet1SetState;
+import me.heldplayer.mods.recording.packet.Packet2UpdatePlayerState;
+import me.heldplayer.mods.recording.packet.Packet3BroadcastRecorders;
+import me.heldplayer.mods.recording.packet.PacketHandler;
 import me.heldplayer.util.HeldCore.Updater;
 import me.heldplayer.util.HeldCore.UsageReporter;
 import me.heldplayer.util.HeldCore.config.Config;

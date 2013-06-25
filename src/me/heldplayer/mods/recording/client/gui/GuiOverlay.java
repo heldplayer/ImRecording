@@ -3,11 +3,11 @@ package me.heldplayer.mods.recording.client.gui;
 
 import java.util.ArrayList;
 
+import me.heldplayer.mods.recording.CommonProxy;
+import me.heldplayer.mods.recording.ModRecording;
+import me.heldplayer.mods.recording.RecordingInfo;
+import me.heldplayer.mods.recording.ScreenLocation;
 import me.heldplayer.mods.recording.client.ClientProxy;
-import me.heldplayer.mods.recording.common.CommonProxy;
-import me.heldplayer.mods.recording.common.ModRecording;
-import me.heldplayer.mods.recording.common.RecordingInfo;
-import me.heldplayer.mods.recording.common.ScreenLocation;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;

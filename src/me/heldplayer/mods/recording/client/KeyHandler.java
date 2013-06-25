@@ -4,9 +4,9 @@ package me.heldplayer.mods.recording.client;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
-import me.heldplayer.mods.recording.common.CommonProxy;
-import me.heldplayer.mods.recording.common.ModRecording;
-import me.heldplayer.mods.recording.common.RecordingInfo;
+import me.heldplayer.mods.recording.CommonProxy;
+import me.heldplayer.mods.recording.ModRecording;
+import me.heldplayer.mods.recording.RecordingInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.settings.KeyBinding;

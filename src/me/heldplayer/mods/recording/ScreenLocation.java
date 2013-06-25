@@ -1,5 +1,5 @@
 
-package me.heldplayer.mods.recording.common;
+package me.heldplayer.mods.recording;
 
 import me.heldplayer.util.HeldCore.config.IConfigurable;
 import cpw.mods.fml.relauncher.Side;
