@@ -5,7 +5,10 @@ import java.io.File;
 import java.util.List;
 
 import me.heldplayer.mods.recording.client.ClientProxy;
-import me.heldplayer.mods.recording.common.network.PacketHandler;
+import me.heldplayer.mods.recording.common.packet.Packet1SetState;
+import me.heldplayer.mods.recording.common.packet.Packet2UpdatePlayerState;
+import me.heldplayer.mods.recording.common.packet.Packet3BroadcastRecorders;
+import me.heldplayer.mods.recording.common.packet.PacketHandler;
 import me.heldplayer.util.HeldCore.Updater;
 import me.heldplayer.util.HeldCore.UsageReporter;
 import me.heldplayer.util.HeldCore.config.Config;
@@ -129,7 +132,8 @@ public class ModRecording {
             }
         }
 
-        player.playerNetServerHandler.sendPacketToPlayer(PacketHandler.getPacket(2, players));
+        Packet3BroadcastRecorders packet = new Packet3BroadcastRecorders(players);
+        player.playerNetServerHandler.sendPacketToPlayer(PacketHandler.instance.createPacket(packet));
     }
 
     @SuppressWarnings("unchecked")
@@ -141,7 +145,8 @@ public class ModRecording {
         for (int i = 0; i < players.size(); i++) {
             EntityPlayerMP player = ((EntityPlayerMP) players.get(i));
 
-            player.playerNetServerHandler.sendPacketToPlayer(PacketHandler.getPacket(1, info));
+            Packet2UpdatePlayerState packet = new Packet2UpdatePlayerState(info);
+            player.playerNetServerHandler.sendPacketToPlayer(PacketHandler.instance.createPacket(packet));
 
             if (chatMessages.getValue()) {
                 String message = info.getRecordingString(false);
@@ -154,7 +159,8 @@ public class ModRecording {
 
     @SideOnly(Side.CLIENT)
     public void sendRecordingToServer() {
-        FMLClientHandler.instance().sendPacket(PacketHandler.getPacket(0, ClientProxy.playerInfo));
+        Packet1SetState packet = new Packet1SetState(ClientProxy.playerInfo);
+        FMLClientHandler.instance().sendPacket(PacketHandler.instance.createPacket(packet));
     }
 
 }
