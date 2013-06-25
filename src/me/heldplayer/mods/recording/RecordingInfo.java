@@ -2,6 +2,7 @@
 package me.heldplayer.mods.recording;
 
 import me.heldplayer.mods.recording.client.ClientProxy;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -95,22 +96,22 @@ public class RecordingInfo {
         return 0xFFFFF | (opacity << 24);
     }
 
-    public ChatColor getChatColor() {
+    public EnumChatFormatting getChatColor() {
         if (this.state == (byte) 1) {
-            return ChatColor.RED;
+            return EnumChatFormatting.RED;
         }
         if (this.state == (byte) 2) {
-            return ChatColor.BLUE;
+            return EnumChatFormatting.BLUE;
         }
         if (this.state == (byte) 3) {
-            return ChatColor.GREEN;
+            return EnumChatFormatting.GREEN;
         }
 
-        return ChatColor.GRAY;
+        return EnumChatFormatting.GRAY;
     }
 
     public String getRecordingString(boolean onConnect) {
-        String base = this.getChatColor() + "" + ChatColor.ITALIC + this.name + ChatColor.GRAY + "" + ChatColor.ITALIC + " ";
+        String base = this.getChatColor() + "" + EnumChatFormatting.ITALIC + this.name + EnumChatFormatting.GRAY + "" + EnumChatFormatting.ITALIC + " ";
 
         if (onConnect) {
             if (this.state == (byte) 1) {
