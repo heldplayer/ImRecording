@@ -23,7 +23,7 @@ public class Packet2UpdatePlayerState extends HeldCorePacket {
     }
 
     public Packet2UpdatePlayerState(RecordingInfo info) {
-        super(1);
+        super(2);
         this.state = info.getState();
         this.username = info.name;
     }
@@ -49,31 +49,28 @@ public class Packet2UpdatePlayerState extends HeldCorePacket {
 
     @Override
     public void onData(INetworkManager manager, EntityPlayer player) {
-        existanceCheck:
-        {
-            List<RecordingInfo> infos = CommonProxy.recordingPlayers;
+        List<RecordingInfo> infos = CommonProxy.recordingPlayers;
 
-            for (int i = 0; i < infos.size(); i++) {
-                RecordingInfo info = infos.get(i);
+        for (int i = 0; i < infos.size(); i++) {
+            RecordingInfo info = infos.get(i);
 
-                if (info.name.equalsIgnoreCase(this.username)) {
-                    info.setState((byte) this.state);
+            if (info.name.equalsIgnoreCase(this.username)) {
+                info.setState((byte) this.state);
 
-                    if (this.state == 0) {
-                        infos.remove(i);
-                    }
-
-                    info.displayTime = 0;
-
-                    break existanceCheck;
+                if (this.state == 0) {
+                    infos.remove(i);
                 }
-            }
 
-            if (this.state != 0) {
-                RecordingInfo info = new RecordingInfo(this.username, (byte) this.state);
+                info.displayTime = 0;
 
-                infos.add(info);
+                return;
             }
+        }
+
+        if (this.state != 0) {
+            RecordingInfo info = new RecordingInfo(this.username, (byte) this.state);
+
+            infos.add(info);
         }
     }
 }

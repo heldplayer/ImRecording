@@ -39,37 +39,37 @@ public class Packet1SetState extends HeldCorePacket {
 
     @Override
     public void onData(INetworkManager manager, EntityPlayer player) {
-        RecordingInfo localInfo = null;
+        RecordingInfo info = null;
 
         existanceCheck:
         {
             List<RecordingInfo> infos = CommonProxy.recordingPlayers;
 
             for (int i = 0; i < infos.size(); i++) {
-                localInfo = infos.get(i);
+                info = infos.get(i);
 
-                if (localInfo.name.equalsIgnoreCase(player.username)) {
-                    localInfo.setState((byte) this.state);
+                if (info.name.equalsIgnoreCase(player.username)) {
+                    info.setState((byte) this.state);
 
                     if (this.state == 0) {
                         infos.remove(i);
                     }
 
-                    localInfo.displayTime = 0;
+                    info.displayTime = 0;
 
                     break existanceCheck;
                 }
             }
 
             if (this.state != 0) {
-                localInfo = new RecordingInfo(player.username, (byte) this.state);
+                info = new RecordingInfo(player.username, (byte) this.state);
 
-                infos.add(localInfo);
+                infos.add(info);
             }
         }
 
-        if (localInfo != null) {
-            ModRecording.instance.sendPlayerToPlayers(localInfo);
+        if (info != null) {
+            ModRecording.instance.sendPlayerToPlayers(info);
         }
     }
 

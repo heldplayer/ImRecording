@@ -22,7 +22,7 @@ public class Packet3BroadcastRecorders extends HeldCorePacket {
     }
 
     public Packet3BroadcastRecorders(RecordingInfo[] infos) {
-        super(1);
+        super(3);
         this.infos = infos;
     }
 
