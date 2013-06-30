@@ -14,17 +14,24 @@ import net.minecraft.network.INetworkManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import cpw.mods.fml.relauncher.Side;
+
 public class Packet1SetState extends HeldCorePacket {
 
     public int state;
 
     public Packet1SetState(int packetId) {
-        super(packetId);
+        super(packetId, null);
     }
 
     public Packet1SetState(RecordingInfo info) {
-        super(1);
+        super(1, null);
         this.state = info.getState();
+    }
+
+    @Override
+    public Side getSendingSide() {
+        return Side.CLIENT;
     }
 
     @Override

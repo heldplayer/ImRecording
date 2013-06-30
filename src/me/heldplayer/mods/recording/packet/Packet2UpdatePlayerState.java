@@ -13,19 +13,26 @@ import net.minecraft.network.INetworkManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import cpw.mods.fml.relauncher.Side;
+
 public class Packet2UpdatePlayerState extends HeldCorePacket {
 
     public int state;
     public String username;
 
     public Packet2UpdatePlayerState(int packetId) {
-        super(packetId);
+        super(packetId, null);
     }
 
     public Packet2UpdatePlayerState(RecordingInfo info) {
-        super(2);
+        super(2, null);
         this.state = info.getState();
         this.username = info.name;
+    }
+
+    @Override
+    public Side getSendingSide() {
+        return Side.SERVER;
     }
 
     @Override

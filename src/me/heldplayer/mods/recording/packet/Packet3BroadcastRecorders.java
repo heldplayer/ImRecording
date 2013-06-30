@@ -13,17 +13,24 @@ import net.minecraft.network.INetworkManager;
 
 import com.google.common.io.ByteArrayDataInput;
 
+import cpw.mods.fml.relauncher.Side;
+
 public class Packet3BroadcastRecorders extends HeldCorePacket {
 
     public RecordingInfo[] infos;
 
     public Packet3BroadcastRecorders(int packetId) {
-        super(packetId);
+        super(packetId, null);
     }
 
     public Packet3BroadcastRecorders(RecordingInfo[] infos) {
-        super(3);
+        super(3, null);
         this.infos = infos;
+    }
+
+    @Override
+    public Side getSendingSide() {
+        return Side.SERVER;
     }
 
     @Override
