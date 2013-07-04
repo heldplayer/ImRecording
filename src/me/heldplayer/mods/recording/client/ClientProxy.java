@@ -5,10 +5,14 @@ import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
 import me.heldplayer.mods.recording.client.gui.GuiOverlay;
+import me.heldplayer.util.HeldCore.reflection.RClass;
+import me.heldplayer.util.HeldCore.reflection.RField;
+import me.heldplayer.util.HeldCore.reflection.ReflectionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.NetHandler;
 import net.minecraft.network.packet.Packet1Login;
+import net.minecraft.util.Session;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -48,7 +52,11 @@ public class ClientProxy extends CommonProxy {
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
 
-        playerInfo = new RecordingInfo(Minecraft.getMinecraft().session.username, (byte) 0);
+        RClass<Minecraft> minecraftClass = ReflectionHelper.getClass(Minecraft.class);
+        RField<Minecraft, Session> sessionField = minecraftClass.getField("session");
+        Session session = sessionField.get(Minecraft.getMinecraft());
+
+        playerInfo = new RecordingInfo(session.func_111285_a(), (byte) 0);
     }
 
     @Override
