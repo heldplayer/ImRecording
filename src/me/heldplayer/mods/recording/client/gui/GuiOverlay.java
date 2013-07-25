@@ -3,16 +3,17 @@ package me.heldplayer.mods.recording.client.gui;
 
 import java.util.ArrayList;
 
+import me.heldplayer.mods.recording.Assets;
 import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
 import me.heldplayer.mods.recording.ScreenLocation;
 import me.heldplayer.mods.recording.client.ClientProxy;
+import me.heldplayer.util.HeldCore.client.MC;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.resources.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
@@ -22,15 +23,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiOverlay extends Gui {
 
-    public static final ResourceLocation resourceFont = new ResourceLocation("textures/font/ascii.png");
-    public static final ResourceLocation resourceSprites = new ResourceLocation("imrecording:textures/gui/sprites.png");
-
     public ScreenLocation location;
     private FontRenderer font;
 
     public GuiOverlay(ScreenLocation location) {
         this.location = location;
-        this.font = new FontRenderer(Minecraft.getMinecraft().gameSettings, resourceFont, Minecraft.getMinecraft().renderEngine, false);
+        this.font = MC.getFontRenderer();
     }
 
     public void tick() {
@@ -100,7 +98,7 @@ public class GuiOverlay extends Gui {
             if (player != null && mc.thePlayer != null) {
                 int color = player.getColor();
 
-                mc.renderEngine.func_110577_a(resourceSprites);
+                mc.renderEngine.func_110577_a(Assets.SPRITES);
 
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, ((float) ((color >> 24) & 0xFF) / 255.0F));
 
@@ -117,7 +115,7 @@ public class GuiOverlay extends Gui {
             }
         }
 
-        if (Minecraft.getMinecraft().theWorld == null) {
+        if (MC.getWorld() == null) {
             RecordingInfo player = ClientProxy.playerInfo;
 
             if (player.getState() == 0) {
@@ -126,7 +124,7 @@ public class GuiOverlay extends Gui {
 
             int color = player.getColor();
 
-            mc.renderEngine.func_110577_a(resourceSprites);
+            mc.renderEngine.func_110577_a(Assets.SPRITES);
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, ((float) ((color >> 24) & 0xFF) / 255.0F));
 

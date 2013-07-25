@@ -3,6 +3,7 @@ package me.heldplayer.mods.recording.client;
 
 import java.util.EnumSet;
 
+import me.heldplayer.util.HeldCore.client.MC;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.ScaledResolution;
@@ -28,7 +29,7 @@ public class TickHandler implements ITickHandler {
     @Override
     public void tickEnd(EnumSet<TickType> type, Object... tickData) {
         if (type.equals(EnumSet.of(TickType.RENDER))) {
-            Minecraft mc = Minecraft.getMinecraft();
+            Minecraft mc = MC.getMinecraft();
             ScaledResolution resolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
 
             if (mc.currentScreen != null && mc.currentScreen.getClass() == GuiMainMenu.class) {
@@ -42,8 +43,8 @@ public class TickHandler implements ITickHandler {
 
     @ForgeSubscribe(receiveCanceled = true)
     public void renderGameOverlay(RenderGameOverlayEvent.Pre event) {
-        if (event.type == ElementType.TEXT) {
-            Minecraft mc = Minecraft.getMinecraft();
+        if (event.type == ElementType.PORTAL) {
+            Minecraft mc = MC.getMinecraft();
             ScaledResolution resolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
             ClientProxy.overlay.drawScreen(mc, resolution);
         }

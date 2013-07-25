@@ -5,6 +5,7 @@ import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
 import me.heldplayer.mods.recording.client.gui.GuiOverlay;
+import me.heldplayer.util.HeldCore.client.MC;
 import me.heldplayer.util.HeldCore.reflection.RClass;
 import me.heldplayer.util.HeldCore.reflection.RField;
 import me.heldplayer.util.HeldCore.reflection.ReflectionHelper;
@@ -54,7 +55,7 @@ public class ClientProxy extends CommonProxy {
 
         RClass<Minecraft> minecraftClass = ReflectionHelper.getClass(Minecraft.class);
         RField<Minecraft, Session> sessionField = minecraftClass.getField("session");
-        Session session = sessionField.get(Minecraft.getMinecraft());
+        Session session = sessionField.get(MC.getMinecraft());
 
         playerInfo = new RecordingInfo(session.func_111285_a(), (byte) 0);
     }

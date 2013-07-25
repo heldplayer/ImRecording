@@ -4,6 +4,7 @@ package me.heldplayer.mods.recording;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import me.heldplayer.util.HeldCore.HeldCoreProxy;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.NetLoginHandler;
@@ -20,7 +21,7 @@ import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.server.FMLServerHandler;
 
-public class CommonProxy implements IConnectionHandler {
+public class CommonProxy extends HeldCoreProxy implements IConnectionHandler {
 
     public static Logger log;
     public static ArrayList<RecordingInfo> recordingPlayers = new ArrayList<RecordingInfo>();

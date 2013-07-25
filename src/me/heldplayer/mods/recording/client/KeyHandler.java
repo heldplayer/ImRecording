@@ -7,6 +7,7 @@ import java.util.EnumSet;
 import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
+import me.heldplayer.util.HeldCore.client.MC;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.settings.KeyBinding;
@@ -38,7 +39,7 @@ public class KeyHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.
         if (!tickEnd) {
             return;
         }
-        Minecraft mc = Minecraft.getMinecraft();
+        Minecraft mc = MC.getMinecraft();
 
         if (mc.currentScreen != null && mc.theWorld != null && !(mc.currentScreen instanceof GuiMainMenu)) {
             return;
@@ -77,7 +78,7 @@ public class KeyHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.
                 info.setState((byte) (state > 0 ? 0 : 1));
 
                 if (state != info.getState()) {
-                    if (Minecraft.getMinecraft().theWorld != null) {
+                    if (mc.theWorld != null) {
                         ModRecording.instance.sendRecordingToServer();
                     }
                 }
@@ -93,7 +94,7 @@ public class KeyHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.
         if (!tickEnd) {
             return;
         }
-        Minecraft mc = Minecraft.getMinecraft();
+        Minecraft mc = MC.getMinecraft();
 
         if (mc.currentScreen != null && mc.theWorld != null && !(mc.currentScreen instanceof GuiMainMenu)) {
             return;
@@ -111,7 +112,7 @@ public class KeyHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.
                 info.setState((byte) (state == 1 ? 2 : (state == 2 ? 1 : state != 0 ? oldState : 0)));
 
                 if (state != info.getState()) {
-                    if (Minecraft.getMinecraft().theWorld != null) {
+                    if (mc.theWorld != null) {
                         ModRecording.instance.sendRecordingToServer();
                     }
                 }
@@ -123,7 +124,7 @@ public class KeyHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.
                 info.setState((byte) (state == 3 ? oldState : 3));
 
                 if (state != info.getState()) {
-                    if (Minecraft.getMinecraft().theWorld != null) {
+                    if (mc.theWorld != null) {
                         ModRecording.instance.sendRecordingToServer();
                     }
                 }
