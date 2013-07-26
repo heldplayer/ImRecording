@@ -46,7 +46,7 @@ public class ModRecording extends HeldCoreMod {
     public static ConfigValue<Boolean> lockOverlay;
     public static ConfigValue<Boolean> instantHide;
 
-    @EventHandler
+    @Override
     public void preInit(FMLPreInitializationEvent event) {
         File file = new File(event.getModConfigurationDirectory(), "HeldCore");
 
@@ -68,10 +68,10 @@ public class ModRecording extends HeldCoreMod {
         this.config.addConfigKey(instantHide);
     }
 
-    @EventHandler
+    @Override
     public void init(FMLInitializationEvent event) {}
 
-    @EventHandler
+    @Override
     public void postInit(FMLPostInitializationEvent event) {}
 
     @SuppressWarnings("unchecked")
