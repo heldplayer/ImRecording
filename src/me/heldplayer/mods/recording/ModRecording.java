@@ -49,8 +49,6 @@ public class ModRecording extends HeldCoreMod {
     @Override
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        super.preInit(event);
-
         File file = new File(event.getModConfigurationDirectory(), "HeldCore");
 
         if (!file.exists()) {
@@ -69,6 +67,8 @@ public class ModRecording extends HeldCoreMod {
         this.config.addConfigKey(chatMessages);
         this.config.addConfigKey(lockOverlay);
         this.config.addConfigKey(instantHide);
+
+        super.preInit(event);
     }
 
     @Override
