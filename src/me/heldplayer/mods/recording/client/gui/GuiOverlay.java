@@ -98,7 +98,7 @@ public class GuiOverlay extends Gui {
             if (player != null && mc.thePlayer != null) {
                 int color = player.getColor();
 
-                mc.renderEngine.func_110577_a(Assets.SPRITES);
+                mc.renderEngine.bindTexture(Assets.SPRITES);
 
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, ((float) ((color >> 24) & 0xFF) / 255.0F));
 
@@ -124,7 +124,7 @@ public class GuiOverlay extends Gui {
 
             int color = player.getColor();
 
-            mc.renderEngine.func_110577_a(Assets.SPRITES);
+            mc.renderEngine.bindTexture(Assets.SPRITES);
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, ((float) ((color >> 24) & 0xFF) / 255.0F));
 

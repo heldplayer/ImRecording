@@ -57,7 +57,7 @@ public class ClientProxy extends CommonProxy {
         RField<Minecraft, Session> sessionField = minecraftClass.getField("session");
         Session session = sessionField.get(MC.getMinecraft());
 
-        playerInfo = new RecordingInfo(session.func_111285_a(), (byte) 0);
+        playerInfo = new RecordingInfo(session.getUsername(), (byte) 0);
     }
 
     @Override
