@@ -8,6 +8,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class RecordingInfo {
+
     public String name;
     private byte state;
     private byte oldState;

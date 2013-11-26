@@ -3,7 +3,6 @@ package me.heldplayer.mods.recording.client.gui;
 
 import java.util.ArrayList;
 
-import me.heldplayer.mods.recording.Assets;
 import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
@@ -14,6 +13,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.util.Icon;
 
 import org.lwjgl.opengl.GL11;
 
@@ -98,11 +99,21 @@ public class GuiOverlay extends Gui {
             if (player != null && mc.thePlayer != null) {
                 int color = player.getColor();
 
-                mc.renderEngine.bindTexture(Assets.SPRITES);
+                mc.renderEngine.bindTexture(me.heldplayer.util.HeldCore.Assets.TEXTURE_MAP);
 
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, ((float) ((color >> 24) & 0xFF) / 255.0F));
 
-                this.drawTexturedModalRect(x - 9, y, player.getState() * 16, 0, 16, 16);
+                Icon icon = ClientProxy.icons[player.getState()];
+
+                if (icon != null) {
+                    Tessellator tes = Tessellator.instance;
+                    tes.startDrawingQuads();
+                    tes.addVertexWithUV((double) x - 9.0D, (double) y + 8.0D, 0.0D, icon.getMinU(), icon.getMaxV());
+                    tes.addVertexWithUV((double) x - 1.0D, (double) y + 8.0D, 0.0D, icon.getMaxU(), icon.getMaxV());
+                    tes.addVertexWithUV((double) x - 1.0D, (double) y, 0.0D, icon.getMaxU(), icon.getMinV());
+                    tes.addVertexWithUV((double) x - 9.0D, (double) y, 0.0D, icon.getMinU(), icon.getMinV());
+                    tes.draw();
+                }
 
                 this.font.drawStringWithShadow(player.name, x, y, color);
 
@@ -124,14 +135,30 @@ public class GuiOverlay extends Gui {
 
             int color = player.getColor();
 
-            mc.renderEngine.bindTexture(Assets.SPRITES);
+            mc.renderEngine.bindTexture(me.heldplayer.util.HeldCore.Assets.TEXTURE_MAP);
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, ((float) ((color >> 24) & 0xFF) / 255.0F));
 
             x = alignRight ? width - 1 - this.font.getStringWidth(player.name) : 10;
             y = alignBottom ? height - 10 : 1;
 
-            this.drawTexturedModalRect(x - 9, y, player.getState() * 16, 0, 16, 16);
+            Icon icon = ClientProxy.icons[player.getState()];
+
+            if (icon != null) {
+                Tessellator tes = Tessellator.instance;
+                tes.startDrawingQuads();
+                tes.addVertexWithUV((double) x - 9.0D, (double) y + 8.0D, 0.0D, icon.getMinU(), icon.getMaxV());
+                tes.addVertexWithUV((double) x - 1.0D, (double) y + 8.0D, 0.0D, icon.getMaxU(), icon.getMaxV());
+                tes.addVertexWithUV((double) x - 1.0D, (double) y, 0.0D, icon.getMaxU(), icon.getMinV());
+                tes.addVertexWithUV((double) x - 9.0D, (double) y, 0.0D, icon.getMinU(), icon.getMinV());
+                tes.draw();
+                tes.startDrawingQuads();
+                tes.addVertexWithUV(0.0D, 32.0D, 0.0D, 0.0D, 1.0D);
+                tes.addVertexWithUV(32.0D, 32.0D, 0.0D, 1.0D, 1.0D);
+                tes.addVertexWithUV(32.0D, 0.0D, 0.0D, 1.0D, 0.0D);
+                tes.addVertexWithUV(0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+                tes.draw();
+            }
 
             this.font.drawStringWithShadow(player.name, x, y, color);
         }
