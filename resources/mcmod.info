@@ -2,7 +2,7 @@
 {
   "modid" : "ImRecording",
   "name" : "The I'm Recording Mod",
-  "version" : "1.03.03.01",
+  "version" : "@VERSION@",
   "credits" : "The forgecraft server for inspiration to make this mod.",
   "authors": [
     "heldplayer"
