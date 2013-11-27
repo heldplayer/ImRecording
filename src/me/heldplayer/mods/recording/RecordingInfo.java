@@ -1,18 +1,33 @@
 
 package me.heldplayer.mods.recording;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
 import me.heldplayer.mods.recording.client.ClientProxy;
+import me.heldplayer.util.HeldCore.sync.ISyncable;
+import me.heldplayer.util.HeldCore.sync.ISyncableObjectOwner;
+import me.heldplayer.util.HeldCore.sync.SInteger;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+
+import com.google.common.io.ByteArrayDataInput;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class RecordingInfo {
+public class RecordingInfo implements ISyncableObjectOwner {
 
     public String name;
-    private byte state;
-    private byte oldState;
+    private SInteger state;
+    private int oldState;
     public int displayTime;
+
+    public boolean isInvalid;
+    private List<ISyncable> syncables;
 
     // States:
     // 0: Not recording
@@ -20,9 +35,10 @@ public class RecordingInfo {
     // 2: Recording paused
     // 3: Request stop/pause recording
 
-    public RecordingInfo(String name, byte state) {
+    public RecordingInfo(String name, int state) {
         this.name = name;
-        this.state = state;
+        this.state = new SInteger(this, state);
+        this.syncables = Arrays.asList((ISyncable) this.state);
     }
 
     @Override
@@ -56,18 +72,18 @@ public class RecordingInfo {
         return true;
     }
 
-    public byte getState() {
-        return this.state;
+    public int getState() {
+        return this.state.getValue();
     }
 
-    public byte getOldState() {
+    public int getOldState() {
         return this.oldState;
     }
 
-    public void setState(byte newState) {
+    public void setState(int newState) {
         this.displayTime = 0;
-        this.oldState = this.state;
-        this.state = newState;
+        this.oldState = this.state.getValue();
+        this.state.setValue(newState);
     }
 
     @SideOnly(Side.CLIENT)
@@ -78,13 +94,13 @@ public class RecordingInfo {
             opacity = (int) (255.0F - (((float) this.displayTime) * 255.0F / 205.0F));
         }
 
-        if (this.state == (byte) 1) {
+        if (this.state.getValue() == 1) {
             return 0xFF4444 | (opacity << 24);
         }
-        if (this.state == (byte) 2) {
+        if (this.state.getValue() == 2) {
             return 0x0080FF | (opacity << 24);
         }
-        if (this.state == (byte) 3) {
+        if (this.state.getValue() == 3) {
             opacity = 0x90 + (int) MathHelper.abs(0x60 * MathHelper.sin((float) this.displayTime / 6.28F));
             if (!ClientProxy.overlayEnabled) {
                 if (this.displayTime < 200) {
@@ -98,13 +114,13 @@ public class RecordingInfo {
     }
 
     public EnumChatFormatting getChatColor() {
-        if (this.state == (byte) 1) {
+        if (this.state.getValue() == 1) {
             return EnumChatFormatting.RED;
         }
-        if (this.state == (byte) 2) {
+        if (this.state.getValue() == 2) {
             return EnumChatFormatting.BLUE;
         }
-        if (this.state == (byte) 3) {
+        if (this.state.getValue() == 3) {
             return EnumChatFormatting.GREEN;
         }
 
@@ -115,33 +131,33 @@ public class RecordingInfo {
         String base = this.getChatColor() + "" + EnumChatFormatting.ITALIC + this.name + EnumChatFormatting.GRAY + "" + EnumChatFormatting.ITALIC + " ";
 
         if (onConnect) {
-            if (this.state == (byte) 1) {
+            if (this.state.getValue() == 1) {
                 return base + "is recording";
             }
-            if (this.state == (byte) 2) {
+            if (this.state.getValue() == 2) {
                 return base + "was recording but paused";
             }
-            if (this.state == (byte) 3) {
+            if (this.state.getValue() == 3) {
                 return base + "is requesting to halt recording";
             }
         }
         else {
-            if (this.state == (byte) 1 && this.oldState == (byte) 0) {
+            if (this.state.getValue() == 1 && this.oldState == 0) {
                 return base + "has started recording";
             }
-            if (this.state == (byte) 1 && this.oldState == (byte) 2) {
+            if (this.state.getValue() == 1 && this.oldState == 2) {
                 return base + "has resumed recording";
             }
-            if (this.state == (byte) 2 && this.oldState == (byte) 1) {
+            if (this.state.getValue() == 2 && this.oldState == 1) {
                 return base + "has paused recording";
             }
-            if (this.state == (byte) 3) {
+            if (this.state.getValue() == 3) {
                 return base + "is requesting to halt recording";
             }
-            if (this.state == (byte) 0 && (this.oldState == (byte) 1 || this.oldState == (byte) 2)) {
+            if (this.state.getValue() == 0 && (this.oldState == 1 || this.oldState == 2)) {
                 return base + "has stopped recording";
             }
-            if (this.oldState == (byte) 3) {
+            if (this.oldState == 3) {
                 return base + "is no longer requesting to halt recording";
             }
         }
@@ -152,6 +168,69 @@ public class RecordingInfo {
     @Override
     public String toString() {
         return "[RecordingPair: name=" + this.name + ", state=" + this.state + " ]";
+    }
+
+    @Override
+    public boolean isNotValid() {
+        return this.isInvalid;
+    }
+
+    @Override
+    public List<ISyncable> getSyncables() {
+        return this.syncables;
+    }
+
+    @Override
+    public void readSetup(ByteArrayDataInput in) throws IOException {
+        for (int i = 0; i < this.syncables.size(); i++) {
+            ISyncable syncable = this.syncables.get(i);
+            syncable.setId(in.readInt());
+            syncable.read(in);
+        }
+    }
+
+    @Override
+    public void writeSetup(DataOutputStream out) throws IOException {
+        for (int i = 0; i < this.syncables.size(); i++) {
+            ISyncable syncable = this.syncables.get(i);
+            out.writeInt(syncable.getId());
+            syncable.write(out);
+        }
+    }
+
+    @Override
+    public String getIdentifier() {
+        return "RecordingInfo_" + this.name;
+    }
+
+    @Override
+    public boolean isWorldBound() {
+        return false;
+    }
+
+    @Override
+    public World getWorld() {
+        return null;
+    }
+
+    @Override
+    public int getPosX() {
+        return 0;
+    }
+
+    @Override
+    public int getPosY() {
+        return 0;
+    }
+
+    @Override
+    public int getPosZ() {
+        return 0;
+    }
+
+    @Override
+    public void onDataChanged(ISyncable syncable) {
+        this.displayTime = 0;
     }
 
 }

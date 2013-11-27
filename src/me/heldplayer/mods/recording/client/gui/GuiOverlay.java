@@ -73,8 +73,12 @@ public class GuiOverlay extends Gui {
 
         RecordingInfo[] playerArray = new RecordingInfo[players.size()];
 
-        for (int i = 0; i < playerArray.length; i++) {
+        for (int i = 0; i < playerArray.length && i < players.size(); i++) {
             playerArray[i] = players.get(i);
+
+            if (playerArray[i] == null) {
+                continue;
+            }
 
             if (playerArray[i].getState() == 0) {
                 players.remove(i);

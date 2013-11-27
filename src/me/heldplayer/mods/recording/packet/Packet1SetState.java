@@ -9,6 +9,7 @@ import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
 import me.heldplayer.util.HeldCore.packet.HeldCorePacket;
+import me.heldplayer.util.HeldCore.sync.SyncHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 
@@ -48,31 +49,32 @@ public class Packet1SetState extends HeldCorePacket {
     public void onData(INetworkManager manager, EntityPlayer player) {
         RecordingInfo info = null;
 
-        existanceCheck:
-        {
-            List<RecordingInfo> infos = CommonProxy.recordingPlayers;
+        List<RecordingInfo> infos = CommonProxy.recordingPlayers;
 
-            for (int i = 0; i < infos.size(); i++) {
-                info = infos.get(i);
+        for (int i = 0; i < infos.size(); i++) {
+            info = infos.get(i);
 
-                if (info.name.equalsIgnoreCase(player.username)) {
-                    info.setState((byte) this.state);
+            if (info.name.equalsIgnoreCase(player.username)) {
+                info.setState(this.state);
 
-                    if (this.state == 0) {
-                        infos.remove(i);
-                    }
-
-                    info.displayTime = 0;
-
-                    break existanceCheck;
+                if (this.state == 0) {
+                    infos.remove(i);
                 }
+
+                info.displayTime = 0;
+
+                break;
             }
 
-            if (this.state != 0) {
-                info = new RecordingInfo(player.username, (byte) this.state);
+            info = null;
+        }
 
-                infos.add(info);
-            }
+        if (info == null && this.state != 0) {
+            info = new RecordingInfo(player.username, (byte) this.state);
+
+            SyncHandler.startTracking(info);
+
+            infos.add(info);
         }
 
         if (info != null) {

@@ -74,8 +74,8 @@ public class KeyHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.
                 kb.pressTime = 1;
 
                 RecordingInfo info = ClientProxy.playerInfo;
-                byte state = info.getState();
-                info.setState((byte) (state > 0 ? 0 : 1));
+                int state = info.getState();
+                info.setState(state > 0 ? 0 : 1);
 
                 if (state != info.getState()) {
                     if (mc.theWorld != null) {
@@ -107,9 +107,9 @@ public class KeyHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.
         if (kb == pausedToggle) {
             if (kb.pressTime < 10) {
                 RecordingInfo info = ClientProxy.playerInfo;
-                byte state = info.getState();
-                byte oldState = info.getOldState();
-                info.setState((byte) (state == 1 ? 2 : (state == 2 ? 1 : state != 0 ? oldState : 0)));
+                int state = info.getState();
+                int oldState = info.getOldState();
+                info.setState(state == 1 ? 2 : (state == 2 ? 1 : state != 0 ? oldState : 0));
 
                 if (state != info.getState()) {
                     if (mc.theWorld != null) {
@@ -119,9 +119,9 @@ public class KeyHandler extends cpw.mods.fml.client.registry.KeyBindingRegistry.
             }
             else {
                 RecordingInfo info = ClientProxy.playerInfo;
-                byte state = info.getState();
-                byte oldState = info.getOldState();
-                info.setState((byte) (state == 3 ? oldState : 3));
+                int state = info.getState();
+                int oldState = info.getOldState();
+                info.setState(state == 3 ? oldState : 3);
 
                 if (state != info.getState()) {
                     if (mc.theWorld != null) {

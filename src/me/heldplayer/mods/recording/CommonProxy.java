@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.logging.Logger;
 
 import me.heldplayer.util.HeldCore.HeldCoreProxy;
+import me.heldplayer.util.HeldCore.event.SyncEvent;
+import me.heldplayer.util.HeldCore.sync.SyncHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.NetLoginHandler;
@@ -12,37 +14,60 @@ import net.minecraft.network.packet.NetHandler;
 import net.minecraft.network.packet.Packet1Login;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.ForgeSubscribe;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IConnectionHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.Player;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.server.FMLServerHandler;
 
 public class CommonProxy extends HeldCoreProxy implements IConnectionHandler {
 
     public static Logger log;
     public static ArrayList<RecordingInfo> recordingPlayers = new ArrayList<RecordingInfo>();
 
+    @Override
     public void preInit(FMLPreInitializationEvent event) {
         CommonProxy.log = event.getModLog();
     }
 
+    @Override
     public void init(FMLInitializationEvent event) {
+        MinecraftForge.EVENT_BUS.register(this);
+
         NetworkRegistry.instance().registerConnectionHandler(this);
     }
 
+    @Override
     public void postInit(FMLPostInitializationEvent event) {}
 
-    public Side getSide() {
-        return Side.SERVER;
+    @ForgeSubscribe
+    public void onSyncRequestObject(SyncEvent.RequestObject event) {
+        if (event.identifier.startsWith("RecordingInfo_")) {
+            String name = event.identifier.substring(14);
+
+            for (RecordingInfo info : recordingPlayers) {
+                if (info.name.equalsIgnoreCase(name)) {
+                    event.result = info;
+                    return;
+                }
+            }
+
+            RecordingInfo info = new RecordingInfo(name, 0);
+            recordingPlayers.add(info);
+            event.result = info;
+        }
     }
 
     @Override
     public void playerLoggedIn(Player player, NetHandler netHandler, INetworkManager manager) {
         ModRecording.instance.sendPlayersToPlayer((EntityPlayerMP) player);
+
+        for (RecordingInfo info : recordingPlayers) {
+            SyncHandler.startTracking(info, (EntityPlayerMP) player);
+        }
     }
 
     @Override
@@ -58,7 +83,7 @@ public class CommonProxy extends HeldCoreProxy implements IConnectionHandler {
 
     @Override
     public void connectionClosed(INetworkManager manager) {
-        ServerConfigurationManager configManager = MinecraftServer.getServerConfigurationManager(FMLServerHandler.instance().getServer());
+        ServerConfigurationManager configManager = MinecraftServer.getServerConfigurationManager(MinecraftServer.getServer());
 
         ArrayList<String> players = new ArrayList<String>();
 
@@ -74,9 +99,11 @@ public class CommonProxy extends HeldCoreProxy implements IConnectionHandler {
             if (!players.contains(info.name)) {
                 playerInfos.remove(i);
 
-                info.setState((byte) 0);
+                info.setState(0);
 
-                ModRecording.instance.sendPlayerToPlayers(info);
+                //ModRecording.instance.sendPlayerToPlayers(info);
+
+                SyncHandler.stopTracking(info);
 
                 i--;
             }

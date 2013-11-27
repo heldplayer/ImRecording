@@ -6,8 +6,6 @@ import java.util.List;
 
 import me.heldplayer.mods.recording.client.ClientProxy;
 import me.heldplayer.mods.recording.packet.Packet1SetState;
-import me.heldplayer.mods.recording.packet.Packet2UpdatePlayerState;
-import me.heldplayer.mods.recording.packet.Packet3BroadcastRecorders;
 import me.heldplayer.mods.recording.packet.PacketHandler;
 import me.heldplayer.util.HeldCore.HeldCoreMod;
 import me.heldplayer.util.HeldCore.HeldCoreProxy;
@@ -26,6 +24,7 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -83,6 +82,11 @@ public class ModRecording extends HeldCoreMod {
         super.postInit(event);
     }
 
+    @EventHandler
+    public void serverStarted(FMLServerStartedEvent event) {
+        CommonProxy.recordingPlayers.clear();
+    }
+
     @SuppressWarnings("unchecked")
     public void broadcastRecorders() {
         ServerConfigurationManager configManager = MinecraftServer.getServer().getConfigurationManager();
@@ -97,19 +101,19 @@ public class ModRecording extends HeldCoreMod {
     public void sendPlayersToPlayer(EntityPlayerMP player) {
         RecordingInfo[] players = new RecordingInfo[CommonProxy.recordingPlayers.size()];
 
-        for (int i = 0; i < players.length; i++) {
-            players[i] = CommonProxy.recordingPlayers.get(i);
+        if (chatMessages.getValue()) {
+            for (int i = 0; i < players.length; i++) {
+                players[i] = CommonProxy.recordingPlayers.get(i);
 
-            if (chatMessages.getValue()) {
                 String message = players[i].getRecordingString(true);
                 if (message != null) {
                     player.addChatMessage(message);
                 }
-            }
-        }
 
-        Packet3BroadcastRecorders packet = new Packet3BroadcastRecorders(players);
-        player.playerNetServerHandler.sendPacketToPlayer(PacketHandler.instance.createPacket(packet));
+                //SyncHandler.startTracking(players[i], player);
+            }
+
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -118,15 +122,13 @@ public class ModRecording extends HeldCoreMod {
 
         List<EntityPlayerMP> players = configManager.playerEntityList;
 
-        for (int i = 0; i < players.size(); i++) {
-            EntityPlayerMP player = ((EntityPlayerMP) players.get(i));
+        if (chatMessages.getValue()) {
+            String message = info.getRecordingString(false);
 
-            Packet2UpdatePlayerState packet = new Packet2UpdatePlayerState(info);
-            player.playerNetServerHandler.sendPacketToPlayer(PacketHandler.instance.createPacket(packet));
+            if (message != null) {
+                for (int i = 0; i < players.size(); i++) {
+                    EntityPlayerMP player = players.get(i);
 
-            if (chatMessages.getValue()) {
-                String message = info.getRecordingString(false);
-                if (message != null) {
                     player.addChatMessage(message);
                 }
             }

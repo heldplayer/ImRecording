@@ -13,12 +13,14 @@ import me.heldplayer.util.HeldCore.reflection.ReflectionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.network.INetworkManager;
+import net.minecraft.network.MemoryConnection;
+import net.minecraft.network.NetServerHandler;
+import net.minecraft.network.TcpConnection;
 import net.minecraft.network.packet.NetHandler;
 import net.minecraft.network.packet.Packet1Login;
 import net.minecraft.util.Icon;
 import net.minecraft.util.Session;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -41,8 +43,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
-
-        MinecraftForge.EVENT_BUS.register(this);
 
         ClientProxy.overlayEnabled = true;
     }
@@ -70,18 +70,31 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public Side getSide() {
-        return Side.CLIENT;
-    }
-
-    @Override
     public void connectionClosed(INetworkManager manager) {
-        CommonProxy.recordingPlayers.clear();
+        NetHandler handler = null;
+        if (manager instanceof TcpConnection) {
+            handler = ((TcpConnection) manager).theNetHandler;
+        }
+        else if (manager instanceof MemoryConnection) {
+            handler = ((MemoryConnection) manager).myNetHandler;
+        }
+        else {
+            return;
+        }
+
+        if (handler instanceof NetServerHandler) {
+            super.connectionClosed(manager);
+        }
+        else {
+            CommonProxy.recordingPlayers.clear();
+        }
     }
 
     @Override
     public void clientLoggedIn(NetHandler clientHandler, INetworkManager manager, Packet1Login login) {
         CommonProxy.recordingPlayers.clear();
+        //CommonProxy.recordingPlayers.add(playerInfo);
+        //PacketHandler.instance.createPacket(new Packet1TrackingStatus(playerInfo, true));
         ModRecording.instance.sendRecordingToServer();
     }
 
