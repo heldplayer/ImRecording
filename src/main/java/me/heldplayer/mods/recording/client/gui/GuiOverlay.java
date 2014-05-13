@@ -8,13 +8,13 @@ import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
 import me.heldplayer.mods.recording.ScreenLocation;
 import me.heldplayer.mods.recording.client.ClientProxy;
-import me.heldplayer.util.HeldCore.client.MC;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
+import net.specialattack.forge.core.client.MC;
 
 import org.lwjgl.opengl.GL11;
 
@@ -57,7 +57,7 @@ public class GuiOverlay extends Gui {
         }
     }
 
-    public void drawScreen(Minecraft mc, ScaledResolution resolution) {
+    public void drawScreen(Minecraft mc, ScaledResolution resolution, boolean disableOpcaity) {
         GL11.glEnable(GL11.GL_BLEND);
 
         int width = resolution.getScaledWidth();
@@ -101,21 +101,21 @@ public class GuiOverlay extends Gui {
 
         for (RecordingInfo player : playerArray) {
             if (player != null && mc.thePlayer != null) {
-                int color = player.getColor();
+                int color = player.getColor(disableOpcaity);
 
-                mc.renderEngine.bindTexture(me.heldplayer.util.HeldCore.Assets.TEXTURE_MAP);
+                mc.renderEngine.bindTexture(net.specialattack.forge.core.Assets.TEXTURE_MAP);
 
-                GL11.glColor4f(1.0F, 1.0F, 1.0F, ((float) ((color >> 24) & 0xFF) / 255.0F));
+                GL11.glColor4f(1.0F, 1.0F, 1.0F, (((color >> 24) & 0xFF) / 255.0F));
 
-                Icon icon = ClientProxy.icons[player.getState()];
+                IIcon icon = ClientProxy.icons[player.getState()];
 
                 if (icon != null) {
                     Tessellator tes = Tessellator.instance;
                     tes.startDrawingQuads();
-                    tes.addVertexWithUV((double) x - 9.0D, (double) y + 8.0D, 0.0D, icon.getMinU(), icon.getMaxV());
-                    tes.addVertexWithUV((double) x - 1.0D, (double) y + 8.0D, 0.0D, icon.getMaxU(), icon.getMaxV());
-                    tes.addVertexWithUV((double) x - 1.0D, (double) y, 0.0D, icon.getMaxU(), icon.getMinV());
-                    tes.addVertexWithUV((double) x - 9.0D, (double) y, 0.0D, icon.getMinU(), icon.getMinV());
+                    tes.addVertexWithUV(x - 9.0D, y + 8.0D, 0.0D, icon.getMinU(), icon.getMaxV());
+                    tes.addVertexWithUV(x - 1.0D, y + 8.0D, 0.0D, icon.getMaxU(), icon.getMaxV());
+                    tes.addVertexWithUV(x - 1.0D, y, 0.0D, icon.getMaxU(), icon.getMinV());
+                    tes.addVertexWithUV(x - 9.0D, y, 0.0D, icon.getMinU(), icon.getMinV());
                     tes.draw();
                 }
 
@@ -137,30 +137,24 @@ public class GuiOverlay extends Gui {
                 return;
             }
 
-            int color = player.getColor();
+            int color = player.getColor(disableOpcaity);
 
-            mc.renderEngine.bindTexture(me.heldplayer.util.HeldCore.Assets.TEXTURE_MAP);
+            mc.renderEngine.bindTexture(net.specialattack.forge.core.Assets.TEXTURE_MAP);
 
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, ((float) ((color >> 24) & 0xFF) / 255.0F));
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, (((color >> 24) & 0xFF) / 255.0F));
 
             x = alignRight ? width - 1 - this.font.getStringWidth(player.name) : 10;
             y = alignBottom ? height - 10 : 1;
 
-            Icon icon = ClientProxy.icons[player.getState()];
+            IIcon icon = ClientProxy.icons[player.getState()];
 
             if (icon != null) {
                 Tessellator tes = Tessellator.instance;
                 tes.startDrawingQuads();
-                tes.addVertexWithUV((double) x - 9.0D, (double) y + 8.0D, 0.0D, icon.getMinU(), icon.getMaxV());
-                tes.addVertexWithUV((double) x - 1.0D, (double) y + 8.0D, 0.0D, icon.getMaxU(), icon.getMaxV());
-                tes.addVertexWithUV((double) x - 1.0D, (double) y, 0.0D, icon.getMaxU(), icon.getMinV());
-                tes.addVertexWithUV((double) x - 9.0D, (double) y, 0.0D, icon.getMinU(), icon.getMinV());
-                tes.draw();
-                tes.startDrawingQuads();
-                tes.addVertexWithUV(0.0D, 32.0D, 0.0D, 0.0D, 1.0D);
-                tes.addVertexWithUV(32.0D, 32.0D, 0.0D, 1.0D, 1.0D);
-                tes.addVertexWithUV(32.0D, 0.0D, 0.0D, 1.0D, 0.0D);
-                tes.addVertexWithUV(0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+                tes.addVertexWithUV(x - 9.0D, y + 8.0D, 0.0D, icon.getMinU(), icon.getMaxV());
+                tes.addVertexWithUV(x - 1.0D, y + 8.0D, 0.0D, icon.getMaxU(), icon.getMaxV());
+                tes.addVertexWithUV(x - 1.0D, y, 0.0D, icon.getMaxU(), icon.getMinV());
+                tes.addVertexWithUV(x - 9.0D, y, 0.0D, icon.getMinU(), icon.getMinV());
                 tes.draw();
             }
 

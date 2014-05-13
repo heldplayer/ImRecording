@@ -7,12 +7,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import me.heldplayer.mods.recording.client.ClientProxy;
-import me.heldplayer.util.HeldCore.sync.ISyncable;
-import me.heldplayer.util.HeldCore.sync.ISyncableObjectOwner;
-import me.heldplayer.util.HeldCore.sync.SInteger;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.specialattack.forge.core.sync.ISyncable;
+import net.specialattack.forge.core.sync.ISyncableObjectOwner;
+import net.specialattack.forge.core.sync.SInteger;
 
 import com.google.common.io.ByteArrayDataInput;
 
@@ -87,11 +87,13 @@ public class RecordingInfo implements ISyncableObjectOwner {
     }
 
     @SideOnly(Side.CLIENT)
-    public int getColor() {
+    public int getColor(boolean disableOpcaity) {
         int opacity = 0xFF;
 
-        if (!ClientProxy.overlayEnabled) {
-            opacity = (int) (255.0F - (((float) this.displayTime) * 255.0F / 205.0F));
+        if (!disableOpcaity) {
+            if (!ClientProxy.overlayEnabled) {
+                opacity = (int) (255.0F - ((this.displayTime) * 255.0F / 205.0F));
+            }
         }
 
         if (this.state.getValue() == 1) {
@@ -101,10 +103,12 @@ public class RecordingInfo implements ISyncableObjectOwner {
             return 0x0080FF | (opacity << 24);
         }
         if (this.state.getValue() == 3) {
-            opacity = 0x90 + (int) MathHelper.abs(0x60 * MathHelper.sin((float) this.displayTime / 6.28F));
-            if (!ClientProxy.overlayEnabled) {
-                if (this.displayTime < 200) {
-                    opacity *= (float) (205 - this.displayTime) / 205.0F;
+            if (!disableOpcaity) {
+                opacity = 0x90 + (int) MathHelper.abs(0x60 * MathHelper.sin(this.displayTime / 6.28F));
+                if (!ClientProxy.overlayEnabled) {
+                    if (this.displayTime < 200) {
+                        opacity *= (205 - this.displayTime) / 205.0F;
+                    }
                 }
             }
 

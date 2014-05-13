@@ -1,32 +1,30 @@
 
 package me.heldplayer.mods.recording.packet;
 
-import java.io.DataOutputStream;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
 import java.io.IOException;
 import java.util.List;
 
 import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
-import me.heldplayer.util.HeldCore.packet.HeldCorePacket;
-import me.heldplayer.util.HeldCore.sync.SyncHandler;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetworkManager;
-
-import com.google.common.io.ByteArrayDataInput;
-
+import net.specialattack.forge.core.packet.SpACorePacket;
+import net.specialattack.forge.core.sync.SyncHandler;
 import cpw.mods.fml.relauncher.Side;
 
-public class Packet1SetState extends HeldCorePacket {
+public class Packet1SetState extends SpACorePacket {
 
     public int state;
 
-    public Packet1SetState(int packetId) {
-        super(packetId, null);
+    public Packet1SetState() {
+        super(null);
     }
 
     public Packet1SetState(RecordingInfo info) {
-        super(1, null);
+        super(null);
         this.state = info.getState();
     }
 
@@ -36,17 +34,17 @@ public class Packet1SetState extends HeldCorePacket {
     }
 
     @Override
-    public void read(ByteArrayDataInput in) throws IOException {
+    public void read(ChannelHandlerContext context, ByteBuf in) throws IOException {
         this.state = in.readUnsignedByte();
     }
 
     @Override
-    public void write(DataOutputStream out) throws IOException {
+    public void write(ChannelHandlerContext context, ByteBuf out) throws IOException {
         out.writeByte(this.state);
     }
 
     @Override
-    public void onData(INetworkManager manager, EntityPlayer player) {
+    public void onData(ChannelHandlerContext context, EntityPlayer player) {
         RecordingInfo info = null;
 
         List<RecordingInfo> infos = CommonProxy.recordingPlayers;
@@ -54,7 +52,7 @@ public class Packet1SetState extends HeldCorePacket {
         for (int i = 0; i < infos.size(); i++) {
             info = infos.get(i);
 
-            if (info.name.equalsIgnoreCase(player.username)) {
+            if (info.name.equalsIgnoreCase(player.getCommandSenderName())) {
                 info.setState(this.state);
 
                 if (this.state == 0) {
@@ -70,7 +68,7 @@ public class Packet1SetState extends HeldCorePacket {
         }
 
         if (info == null && this.state != 0) {
-            info = new RecordingInfo(player.username, (byte) this.state);
+            info = new RecordingInfo(player.getCommandSenderName(), (byte) this.state);
 
             SyncHandler.startTracking(info);
 
