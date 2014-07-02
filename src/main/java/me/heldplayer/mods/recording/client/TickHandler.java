@@ -34,7 +34,7 @@ public class TickHandler {
     public void onRenderTick(TickEvent.RenderTickEvent event) {
         if (event.phase == Phase.END) {
             Minecraft mc = MC.getMinecraft();
-            ScaledResolution resolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+            ScaledResolution resolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 
             if (mc.currentScreen != null && mc.currentScreen.getClass() == GuiMainMenu.class) {
                 ClientProxy.overlay.drawScreen(mc, resolution, true);
@@ -46,7 +46,7 @@ public class TickHandler {
     public void renderGameOverlay(RenderGameOverlayEvent.Pre event) {
         if (event.type == ElementType.PORTAL) {
             Minecraft mc = MC.getMinecraft();
-            ScaledResolution resolution = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+            ScaledResolution resolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
             ClientProxy.overlay.drawScreen(mc, resolution, false);
         }
     }
