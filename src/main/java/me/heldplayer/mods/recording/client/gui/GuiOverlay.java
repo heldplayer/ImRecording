@@ -24,11 +24,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiOverlay extends Gui {
 
-    public ScreenLocation location;
     private FontRenderer font;
 
-    public GuiOverlay(ScreenLocation location) {
-        this.location = location;
+    public GuiOverlay() {
         this.font = MC.getFontRenderer();
     }
 
@@ -63,8 +61,9 @@ public class GuiOverlay extends Gui {
         int width = resolution.getScaledWidth();
         int height = resolution.getScaledHeight();
 
-        boolean alignRight = (this.location == ScreenLocation.TopRight || this.location == ScreenLocation.BottomRight);
-        boolean alignBottom = (this.location == ScreenLocation.BottomLeft || this.location == ScreenLocation.BottomRight);
+        ScreenLocation location = ModRecording.screenLocation.getValue();
+        boolean alignRight = (location == ScreenLocation.TopRight || location == ScreenLocation.BottomRight);
+        boolean alignBottom = (location == ScreenLocation.BottomLeft || location == ScreenLocation.BottomRight);
 
         int x = alignRight ? width - 1 : 10;
         int y = alignBottom ? height - 10 : 1;

@@ -2,10 +2,7 @@
 package me.heldplayer.mods.recording;
 
 import net.specialattack.forge.core.config.IConfigurable;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public enum ScreenLocation implements IConfigurable {
 
     TopLeft("top-left"),
@@ -14,6 +11,14 @@ public enum ScreenLocation implements IConfigurable {
     BottomRight("bottom-right");
 
     public final String name;
+    public static final String[] validValues;
+
+    static {
+        validValues = new String[values().length];
+        for (int i = 0; i < validValues.length; i++) {
+            validValues[i] = values()[i].name;
+        }
+    }
 
     private ScreenLocation(String name) {
         this.name = name;
@@ -33,6 +38,11 @@ public enum ScreenLocation implements IConfigurable {
     public String serialize() {
         return this.name;
     }
+    
+    @Override
+    public String toString() {
+        return this.name;
+    }
 
     @Override
     public IConfigurable load(String serialized) {
@@ -43,6 +53,11 @@ public enum ScreenLocation implements IConfigurable {
         }
 
         return null;
+    }
+
+    @Override
+    public String[] getValidValues() {
+        return validValues;
     }
 
 }

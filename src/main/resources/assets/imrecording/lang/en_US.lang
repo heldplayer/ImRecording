@@ -1,0 +1,10 @@
+config.imrecording.category.general=General
+config.imrecording.key.screenLocation=Overlay Location
+config.imrecording.key.chatMessages=Show chat messages
+config.imrecording.key.lockOverlay=Lock on hidden
+config.imrecording.key.instantHide=Hide instantly
+
+key.categories.imrecording=I'm Recording Mod
+key.overlay=Toggle Overlay
+key.pause=Toggle Pause state
+key.recording=Toggle Recording state

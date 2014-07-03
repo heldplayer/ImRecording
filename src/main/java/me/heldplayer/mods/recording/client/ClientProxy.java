@@ -45,7 +45,7 @@ public class ClientProxy extends CommonProxy {
         new TickHandler();
         new KeyHandler();
 
-        ClientProxy.overlay = new GuiOverlay(ModRecording.screenLocation.getValue());
+        ClientProxy.overlay = new GuiOverlay();
     }
 
     @Override

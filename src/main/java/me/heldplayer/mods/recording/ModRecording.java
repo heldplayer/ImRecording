@@ -14,8 +14,10 @@ import net.specialattack.forge.core.ModInfo;
 import net.specialattack.forge.core.SpACoreMod;
 import net.specialattack.forge.core.SpACoreProxy;
 import net.specialattack.forge.core.config.Config;
+import net.specialattack.forge.core.config.ConfigCategory;
 import net.specialattack.forge.core.config.ConfigValue;
 import net.specialattack.forge.core.packet.PacketHandler;
+import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -27,7 +29,7 @@ import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-@Mod(modid = Objects.MOD_ID, name = Objects.MOD_NAME)
+@Mod(modid = Objects.MOD_ID, name = Objects.MOD_NAME, guiFactory = Objects.GUI_FACTORY)
 public class ModRecording extends SpACoreMod {
 
     @Instance(value = Objects.MOD_ID)
@@ -44,7 +46,7 @@ public class ModRecording extends SpACoreMod {
 
     public static PacketHandler packetHandler;
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -53,15 +55,17 @@ public class ModRecording extends SpACoreMod {
         ModRecording.packetHandler = new PacketHandler(Objects.MOD_CHANNEL, Packet1SetState.class);
 
         // Config
-        ModRecording.screenLocation = new ConfigValue<ScreenLocation>("screenLocation", Configuration.CATEGORY_GENERAL, Side.CLIENT, ScreenLocation.TopRight, "Determines the location the GUI part of this mod is located in");
-        ModRecording.chatMessages = new ConfigValue<Boolean>("chatMessages", Configuration.CATEGORY_GENERAL, null, Boolean.TRUE, "Set this to true to broadcast a chat message to every player when a player starts recording");
-        ModRecording.lockOverlay = new ConfigValue<Boolean>("lockOverlay", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.TRUE, "Set this to true to disable being able to change recording state when the overlay is hidden");
-        ModRecording.instantHide = new ConfigValue<Boolean>("instantHide", Configuration.CATEGORY_GENERAL, Side.CLIENT, Boolean.FALSE, "Set this to true to instantly hide the overlay instead of fading out slowly when toggling the GUI");
+        ConfigCategory<?> category = new ConfigCategory(Configuration.CATEGORY_GENERAL, "config.imrecording.category.general", null, "General mod settings");
+        ModRecording.screenLocation = new ConfigValue<ScreenLocation>("screenLocation", "config.imrecording.key.screenLocation", Side.CLIENT, ScreenLocation.TopRight, "Determines the location the GUI part of this mod is located in");
+        ModRecording.chatMessages = new ConfigValue<Boolean>("chatMessages", "config.imrecording.key.chatMessages", null, Boolean.TRUE, "Set this to true to broadcast a chat message to every player when a player starts recording");
+        ModRecording.lockOverlay = new ConfigValue<Boolean>("lockOverlay", "config.imrecording.key.lockOverlay", Side.CLIENT, Boolean.TRUE, "Set this to true to disable being able to change recording state when the overlay is hidden");
+        ModRecording.instantHide = new ConfigValue<Boolean>("instantHide", "config.imrecording.key.instantHide", Side.CLIENT, Boolean.FALSE, "Set this to true to instantly hide the overlay instead of fading out slowly when toggling the GUI");
         this.config = new Config(event.getSuggestedConfigurationFile());
-        this.config.addConfigKey(ModRecording.screenLocation);
-        this.config.addConfigKey(ModRecording.chatMessages);
-        this.config.addConfigKey(ModRecording.lockOverlay);
-        this.config.addConfigKey(ModRecording.instantHide);
+        this.config.addCategory(category);
+        category.addValue(ModRecording.screenLocation);
+        category.addValue(ModRecording.chatMessages);
+        category.addValue(ModRecording.lockOverlay);
+        category.addValue(ModRecording.instantHide);
 
         super.preInit(event);
     }
@@ -145,6 +149,11 @@ public class ModRecording extends SpACoreMod {
     @Override
     public SpACoreProxy getProxy() {
         return ModRecording.proxy;
+    }
+
+    @Override
+    public boolean configChanged(OnConfigChangedEvent event) {
+        return true;
     }
 
 }

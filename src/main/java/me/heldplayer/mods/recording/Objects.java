@@ -12,11 +12,11 @@ import org.apache.logging.log4j.Logger;
 public final class Objects {
 
     public static final String MOD_ID = "imrecording";
-    public static final String MOD_NAME = "The \"I'm Recording\" Mod";
-    public static final String MOD_VERSION = "@VERSION@";
+    public static final String MOD_NAME = "I'm Recording Mod";
     public static final String MOD_CHANNEL = "ImRecording";
     public static final String CLIENT_PROXY = "me.heldplayer.mods.recording.client.ClientProxy";
     public static final String SERVER_PROXY = "me.heldplayer.mods.recording.CommonProxy";
+    public static final String GUI_FACTORY = "me.heldplayer.mods.recording.client.gui.GuiFactory";
 
     public static final ModInfo MOD_INFO = new ModInfo(Objects.MOD_ID, Objects.MOD_NAME);
 
