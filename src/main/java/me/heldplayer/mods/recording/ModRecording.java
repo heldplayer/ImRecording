@@ -1,8 +1,16 @@
-
 package me.heldplayer.mods.recording;
 
-import java.util.List;
-
+import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartedEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import me.heldplayer.mods.recording.client.ClientProxy;
 import me.heldplayer.mods.recording.packet.Packet1SetState;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,17 +25,8 @@ import net.specialattack.forge.core.config.Config;
 import net.specialattack.forge.core.config.ConfigCategory;
 import net.specialattack.forge.core.config.ConfigValue;
 import net.specialattack.forge.core.packet.PacketHandler;
-import cpw.mods.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 @Mod(modid = Objects.MOD_ID, name = Objects.MOD_NAME, guiFactory = Objects.GUI_FACTORY)
 public class ModRecording extends SpACoreMod {
@@ -71,6 +70,16 @@ public class ModRecording extends SpACoreMod {
     }
 
     @Override
+    public ModInfo getModInfo() {
+        return Objects.MOD_INFO;
+    }
+
+    @Override
+    public SpACoreProxy getProxy() {
+        return ModRecording.proxy;
+    }
+
+    @Override
     @EventHandler
     public void init(FMLInitializationEvent event) {
         super.init(event);
@@ -80,6 +89,11 @@ public class ModRecording extends SpACoreMod {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
+    }
+
+    @Override
+    public boolean configChanged(OnConfigChangedEvent event) {
+        return true;
     }
 
     @EventHandler
@@ -139,21 +153,6 @@ public class ModRecording extends SpACoreMod {
     public void sendRecordingToServer() {
         Packet1SetState packet = new Packet1SetState(ClientProxy.playerInfo);
         ModRecording.packetHandler.sendPacketToServer(packet);
-    }
-
-    @Override
-    public ModInfo getModInfo() {
-        return Objects.MOD_INFO;
-    }
-
-    @Override
-    public SpACoreProxy getProxy() {
-        return ModRecording.proxy;
-    }
-
-    @Override
-    public boolean configChanged(OnConfigChangedEvent event) {
-        return true;
     }
 
 }

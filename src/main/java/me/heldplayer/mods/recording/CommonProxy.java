@@ -1,8 +1,10 @@
-
 package me.heldplayer.mods.recording;
 
-import java.util.ArrayList;
-
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.network.FMLNetworkEvent;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.server.MinecraftServer;
@@ -10,11 +12,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.specialattack.forge.core.SpACoreProxy;
 import net.specialattack.forge.core.event.SyncEvent;
 import net.specialattack.forge.core.sync.SyncHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent;
+
+import java.util.ArrayList;
 
 public class CommonProxy extends SpACoreProxy {
 
@@ -26,10 +25,12 @@ public class CommonProxy extends SpACoreProxy {
     }
 
     @Override
-    public void init(FMLInitializationEvent event) {}
+    public void init(FMLInitializationEvent event) {
+    }
 
     @Override
-    public void postInit(FMLPostInitializationEvent event) {}
+    public void postInit(FMLPostInitializationEvent event) {
+    }
 
     @SubscribeEvent
     public void onSyncRequestObject(SyncEvent.RequestObject event) {

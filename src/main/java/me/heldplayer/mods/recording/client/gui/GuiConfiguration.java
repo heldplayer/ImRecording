@@ -1,10 +1,9 @@
-
 package me.heldplayer.mods.recording.client.gui;
 
+import cpw.mods.fml.client.config.GuiConfig;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.Objects;
 import net.minecraft.client.gui.GuiScreen;
-import cpw.mods.fml.client.config.GuiConfig;
 
 public class GuiConfiguration extends GuiConfig {
 

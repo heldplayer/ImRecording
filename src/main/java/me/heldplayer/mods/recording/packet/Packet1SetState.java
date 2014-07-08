@@ -1,19 +1,17 @@
-
 package me.heldplayer.mods.recording.packet;
 
+import cpw.mods.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-
-import java.io.IOException;
-import java.util.List;
-
 import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.specialattack.forge.core.packet.SpACorePacket;
 import net.specialattack.forge.core.sync.SyncHandler;
-import cpw.mods.fml.relauncher.Side;
+
+import java.io.IOException;
+import java.util.List;
 
 public class Packet1SetState extends SpACorePacket {
 

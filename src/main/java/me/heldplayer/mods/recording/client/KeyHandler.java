@@ -1,18 +1,4 @@
-
 package me.heldplayer.mods.recording.client;
-
-import java.util.ArrayList;
-
-import me.heldplayer.mods.recording.CommonProxy;
-import me.heldplayer.mods.recording.ModRecording;
-import me.heldplayer.mods.recording.RecordingInfo;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.client.settings.KeyBinding;
-import net.specialattack.forge.core.client.MC;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -21,6 +7,17 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import me.heldplayer.mods.recording.CommonProxy;
+import me.heldplayer.mods.recording.ModRecording;
+import me.heldplayer.mods.recording.RecordingInfo;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.settings.KeyBinding;
+import net.specialattack.forge.core.client.MC;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
+import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 public class KeyHandler {
@@ -57,8 +54,7 @@ public class KeyHandler {
             if (state != this.keyDown[i] || (state && this.repeatings[i])) {
                 if (state) {
                     this.keyDown(type, i, tickEnd, state != this.keyDown[i]);
-                }
-                else {
+                } else {
                     this.keyUp(type, i, tickEnd);
                 }
                 if (tickEnd) {
@@ -100,8 +96,7 @@ public class KeyHandler {
             if (kb == this.recordingToggle || kb == this.pausedToggle) {
                 this.ticktimes[binding]++;
             }
-        }
-        else {
+        } else {
             if (kb == this.recordingToggle) {
                 this.ticktimes[binding] = 1;
 
@@ -148,8 +143,7 @@ public class KeyHandler {
                         ModRecording.instance.sendRecordingToServer();
                     }
                 }
-            }
-            else {
+            } else {
                 RecordingInfo info = ClientProxy.playerInfo;
                 int state = info.getState();
                 int oldState = info.getOldState();

@@ -1,11 +1,8 @@
-
 package me.heldplayer.mods.recording;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
+import com.google.common.io.ByteArrayDataInput;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import me.heldplayer.mods.recording.client.ClientProxy;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
@@ -14,19 +11,18 @@ import net.specialattack.forge.core.sync.ISyncable;
 import net.specialattack.forge.core.sync.ISyncableObjectOwner;
 import net.specialattack.forge.core.sync.SInteger;
 
-import com.google.common.io.ByteArrayDataInput;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class RecordingInfo implements ISyncableObjectOwner {
 
     public String name;
+    public int displayTime;
+    public boolean isInvalid;
     private SInteger state;
     private int oldState;
-    public int displayTime;
-
-    public boolean isInvalid;
     private List<ISyncable> syncables;
 
     // States:
@@ -65,25 +61,29 @@ public class RecordingInfo implements ISyncableObjectOwner {
             if (other.name != null) {
                 return false;
             }
-        }
-        else if (!this.name.equals(other.name)) {
+        } else if (!this.name.equals(other.name)) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "[RecordingPair: name=" + this.name + ", state=" + this.state + " ]";
     }
 
     public int getState() {
         return this.state.getValue();
     }
 
-    public int getOldState() {
-        return this.oldState;
-    }
-
     public void setState(int newState) {
         this.displayTime = 0;
         this.oldState = this.state.getValue();
         this.state.setValue(newState);
+    }
+
+    public int getOldState() {
+        return this.oldState;
     }
 
     @SideOnly(Side.CLIENT)
@@ -117,20 +117,6 @@ public class RecordingInfo implements ISyncableObjectOwner {
         return 0xFFFFF | (opacity << 24);
     }
 
-    public EnumChatFormatting getChatColor() {
-        if (this.state.getValue() == 1) {
-            return EnumChatFormatting.RED;
-        }
-        if (this.state.getValue() == 2) {
-            return EnumChatFormatting.BLUE;
-        }
-        if (this.state.getValue() == 3) {
-            return EnumChatFormatting.GREEN;
-        }
-
-        return EnumChatFormatting.GRAY;
-    }
-
     public String getRecordingString(boolean onConnect) {
         String base = this.getChatColor() + "" + EnumChatFormatting.ITALIC + this.name + EnumChatFormatting.GRAY + "" + EnumChatFormatting.ITALIC + " ";
 
@@ -144,8 +130,7 @@ public class RecordingInfo implements ISyncableObjectOwner {
             if (this.state.getValue() == 3) {
                 return base + "is requesting to halt recording";
             }
-        }
-        else {
+        } else {
             if (this.state.getValue() == 1 && this.oldState == 0) {
                 return base + "has started recording";
             }
@@ -169,9 +154,18 @@ public class RecordingInfo implements ISyncableObjectOwner {
         return null;
     }
 
-    @Override
-    public String toString() {
-        return "[RecordingPair: name=" + this.name + ", state=" + this.state + " ]";
+    public EnumChatFormatting getChatColor() {
+        if (this.state.getValue() == 1) {
+            return EnumChatFormatting.RED;
+        }
+        if (this.state.getValue() == 2) {
+            return EnumChatFormatting.BLUE;
+        }
+        if (this.state.getValue() == 3) {
+            return EnumChatFormatting.GREEN;
+        }
+
+        return EnumChatFormatting.GRAY;
     }
 
     @Override

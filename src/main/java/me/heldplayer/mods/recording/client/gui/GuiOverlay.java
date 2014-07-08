@@ -1,8 +1,7 @@
-
 package me.heldplayer.mods.recording.client.gui;
 
-import java.util.ArrayList;
-
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
@@ -15,11 +14,9 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.specialattack.forge.core.client.MC;
-
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 public class GuiOverlay extends Gui {
@@ -39,16 +36,13 @@ public class GuiOverlay extends Gui {
             if (!ModRecording.instantHide.getValue() && !ClientProxy.overlayEnabled) {
                 if (info.displayTime > 200) {
                     info.displayTime = 200;
-                }
-                else {
+                } else {
                     info.displayTime++;
                 }
-            }
-            else {
+            } else {
                 if (info.getState() == (byte) 3) {
                     info.displayTime++;
-                }
-                else {
+                } else {
                     info.displayTime = 0;
                 }
             }
@@ -122,8 +116,7 @@ public class GuiOverlay extends Gui {
 
                 if (alignBottom) {
                     y -= 9;
-                }
-                else {
+                } else {
                     y += 9;
                 }
             }
