@@ -80,18 +80,6 @@ public class ModRecording extends SpACoreMod {
     }
 
     @Override
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
-        super.init(event);
-    }
-
-    @Override
-    @EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-        super.postInit(event);
-    }
-
-    @Override
     public boolean configChanged(OnConfigChangedEvent event) {
         return true;
     }
