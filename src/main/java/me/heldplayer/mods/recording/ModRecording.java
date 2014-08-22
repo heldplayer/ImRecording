@@ -5,13 +5,12 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import me.heldplayer.mods.recording.client.ClientProxy;
+import me.heldplayer.mods.recording.packet.ImRecordingPacket;
 import me.heldplayer.mods.recording.packet.Packet1SetState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
@@ -43,7 +42,7 @@ public class ModRecording extends SpACoreMod {
     public static ConfigValue<Boolean> lockOverlay;
     public static ConfigValue<Boolean> instantHide;
 
-    public static PacketHandler packetHandler;
+    public static PacketHandler<ImRecordingPacket> packetHandler;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
@@ -51,7 +50,7 @@ public class ModRecording extends SpACoreMod {
     public void preInit(FMLPreInitializationEvent event) {
         Objects.log = event.getModLog();
 
-        ModRecording.packetHandler = new PacketHandler(Objects.MOD_CHANNEL, Packet1SetState.class);
+        ModRecording.packetHandler = new PacketHandler<ImRecordingPacket>(Objects.MOD_CHANNEL, Packet1SetState.class);
 
         // Config
         ConfigCategory<?> category = new ConfigCategory(Configuration.CATEGORY_GENERAL, "config.imrecording.category.general", null, "General mod settings");

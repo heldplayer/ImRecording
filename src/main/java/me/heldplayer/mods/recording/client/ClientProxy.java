@@ -11,16 +11,12 @@ import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
 import me.heldplayer.mods.recording.client.gui.GuiOverlay;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.Session;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.specialattack.forge.core.SpACore;
 import net.specialattack.forge.core.client.MC;
-import net.specialattack.forge.core.reflection.RClass;
-import net.specialattack.forge.core.reflection.RField;
-import net.specialattack.forge.core.reflection.ReflectionHelper;
 
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
@@ -51,9 +47,7 @@ public class ClientProxy extends CommonProxy {
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
 
-        RClass<Minecraft> minecraftClass = ReflectionHelper.getClass(Minecraft.class);
-        RField<Minecraft, Session> sessionField = minecraftClass.getField("session");
-        Session session = sessionField.get(MC.getMinecraft());
+        Session session = MC.getMinecraft().getSession();
 
         ClientProxy.playerInfo = new RecordingInfo(session.getUsername(), (byte) 0);
     }

@@ -64,6 +64,7 @@ public class CommonProxy extends SpACoreProxy {
         }
     }
 
+    // FIXME: Unregister syncable from players that disconnected
     @SubscribeEvent
     public void onServerDisconnectionFromClient(FMLNetworkEvent.ServerDisconnectionFromClientEvent event) {
         ArrayList<String> players = new ArrayList<String>();
