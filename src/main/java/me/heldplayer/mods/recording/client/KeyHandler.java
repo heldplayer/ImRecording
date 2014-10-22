@@ -7,6 +7,7 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
 import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
@@ -16,8 +17,6 @@ import net.minecraft.client.settings.KeyBinding;
 import net.specialattack.forge.core.client.MC;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-
-import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 public class KeyHandler {
@@ -53,7 +52,7 @@ public class KeyHandler {
             boolean state = (keyCode < 0 ? Mouse.isButtonDown(keyCode + 100) : Keyboard.isKeyDown(keyCode));
             if (state != this.keyDown[i] || (state && this.repeatings[i])) {
                 if (state) {
-                    this.keyDown(type, i, tickEnd, state != this.keyDown[i]);
+                    this.keyDown(type, i, tickEnd, !this.keyDown[i]);
                 } else {
                     this.keyUp(type, i, tickEnd);
                 }
@@ -81,9 +80,7 @@ public class KeyHandler {
 
             ArrayList<RecordingInfo> players = CommonProxy.recordingPlayers;
 
-            for (int i = 0; i < players.size(); i++) {
-                RecordingInfo info = players.get(i);
-
+            for (RecordingInfo info : players) {
                 info.displayTime = 0;
             }
         }

@@ -9,12 +9,14 @@ public enum ScreenLocation implements IConfigurable {
     BottomLeft("bottom-left"),
     BottomRight("bottom-right");
     public static final String[] validValues;
+
     static {
         validValues = new String[values().length];
         for (int i = 0; i < validValues.length; i++) {
             validValues[i] = values()[i].name;
         }
     }
+
     public final String name;
 
     private ScreenLocation(String name) {

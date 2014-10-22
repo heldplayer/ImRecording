@@ -1,10 +1,9 @@
 package me.heldplayer.mods.recording.client.gui;
 
 import cpw.mods.fml.client.IModGuiFactory;
+import java.util.Set;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-
-import java.util.Set;
 
 public class GuiFactory implements IModGuiFactory {
 

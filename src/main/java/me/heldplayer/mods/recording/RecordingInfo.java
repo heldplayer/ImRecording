@@ -3,6 +3,10 @@ package me.heldplayer.mods.recording;
 import com.google.common.io.ByteArrayDataInput;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import me.heldplayer.mods.recording.client.ClientProxy;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
@@ -10,11 +14,6 @@ import net.minecraft.world.World;
 import net.specialattack.forge.core.sync.ISyncable;
 import net.specialattack.forge.core.sync.ISyncableObjectOwner;
 import net.specialattack.forge.core.sync.SInteger;
-
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 public class RecordingInfo implements ISyncableObjectOwner {
 
@@ -180,8 +179,7 @@ public class RecordingInfo implements ISyncableObjectOwner {
 
     @Override
     public void readSetup(ByteArrayDataInput in) throws IOException {
-        for (int i = 0; i < this.syncables.size(); i++) {
-            ISyncable syncable = this.syncables.get(i);
+        for (ISyncable syncable : this.syncables) {
             syncable.setId(in.readInt());
             syncable.read(in);
         }
@@ -189,8 +187,7 @@ public class RecordingInfo implements ISyncableObjectOwner {
 
     @Override
     public void writeSetup(DataOutputStream out) throws IOException {
-        for (int i = 0; i < this.syncables.size(); i++) {
-            ISyncable syncable = this.syncables.get(i);
+        for (ISyncable syncable : this.syncables) {
             out.writeInt(syncable.getId());
             syncable.write(out);
         }

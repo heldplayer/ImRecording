@@ -2,6 +2,7 @@ package me.heldplayer.mods.recording.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
 import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
@@ -16,8 +17,6 @@ import net.minecraft.util.IIcon;
 import net.specialattack.forge.core.client.MC;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-
 @SideOnly(Side.CLIENT)
 public class GuiOverlay extends Gui {
 
@@ -30,9 +29,7 @@ public class GuiOverlay extends Gui {
     public void tick() {
         ArrayList<RecordingInfo> players = CommonProxy.recordingPlayers;
 
-        for (int i = 0; i < players.size(); i++) {
-            RecordingInfo info = players.get(i);
-
+        for (RecordingInfo info : players) {
             if (!ModRecording.instantHide.getValue() && !ClientProxy.overlayEnabled) {
                 if (info.displayTime > 200) {
                     info.displayTime = 200;

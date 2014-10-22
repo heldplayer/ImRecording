@@ -9,6 +9,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.List;
 import me.heldplayer.mods.recording.client.ClientProxy;
 import me.heldplayer.mods.recording.packet.ImRecordingPacket;
 import me.heldplayer.mods.recording.packet.Packet1SetState;
@@ -24,8 +25,6 @@ import net.specialattack.forge.core.config.Config;
 import net.specialattack.forge.core.config.ConfigCategory;
 import net.specialattack.forge.core.config.ConfigValue;
 import net.specialattack.forge.core.packet.PacketHandler;
-
-import java.util.List;
 
 @Mod(modid = Objects.MOD_ID, name = Objects.MOD_NAME, guiFactory = Objects.GUI_FACTORY)
 public class ModRecording extends SpACoreMod {
@@ -94,8 +93,8 @@ public class ModRecording extends SpACoreMod {
 
         List<EntityPlayerMP> players = configManager.playerEntityList;
 
-        for (int i = 0; i < players.size(); i++) {
-            this.sendPlayersToPlayer(players.get(i));
+        for (EntityPlayerMP player : players) {
+            this.sendPlayersToPlayer(player);
         }
     }
 
@@ -127,9 +126,7 @@ public class ModRecording extends SpACoreMod {
             String message = info.getRecordingString(false);
 
             if (message != null) {
-                for (int i = 0; i < players.size(); i++) {
-                    EntityPlayerMP player = players.get(i);
-
+                for (EntityPlayerMP player : players) {
                     player.addChatComponentMessage(new ChatComponentText(message));
                 }
             }

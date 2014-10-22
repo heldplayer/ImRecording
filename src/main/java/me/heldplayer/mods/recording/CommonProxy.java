@@ -5,6 +5,8 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
+import java.util.ArrayList;
+import java.util.Collections;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.server.MinecraftServer;
@@ -12,8 +14,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.specialattack.forge.core.SpACoreProxy;
 import net.specialattack.forge.core.event.SyncEvent;
 import net.specialattack.forge.core.sync.SyncHandler;
-
-import java.util.ArrayList;
 
 public class CommonProxy extends SpACoreProxy {
 
@@ -69,9 +69,7 @@ public class CommonProxy extends SpACoreProxy {
     public void onServerDisconnectionFromClient(FMLNetworkEvent.ServerDisconnectionFromClientEvent event) {
         ArrayList<String> players = new ArrayList<String>();
 
-        for (String player : MinecraftServer.getServer().getAllUsernames()) {
-            players.add(player);
-        }
+        Collections.addAll(players, MinecraftServer.getServer().getAllUsernames());
 
         ArrayList<RecordingInfo> playerInfos = CommonProxy.recordingPlayers;
 
