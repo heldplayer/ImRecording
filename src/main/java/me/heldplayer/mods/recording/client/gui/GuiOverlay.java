@@ -70,7 +70,7 @@ public class GuiOverlay extends Gui {
                 continue;
             }
 
-            if (playerArray[i].getState() == 0) {
+            if (playerArray[i].getState() == 0 || playerArray[i].isNotValid()) {
                 players.remove(i);
                 playerArray[i] = null;
                 i--;

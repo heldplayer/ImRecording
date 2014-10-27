@@ -17,6 +17,7 @@ import net.minecraft.util.Session;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.specialattack.forge.core.SpACore;
 import net.specialattack.forge.core.client.MC;
+import net.specialattack.forge.core.event.SyncEvent;
 
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
@@ -49,7 +50,7 @@ public class ClientProxy extends CommonProxy {
 
         Session session = MC.getMinecraft().getSession();
 
-        ClientProxy.playerInfo = new RecordingInfo(session.getUsername(), (byte) 0);
+        ClientProxy.playerInfo = new RecordingInfo(session.getUsername(), session.func_148256_e().getId(), (byte) 0);
     }
 
     @SubscribeEvent
@@ -58,10 +59,8 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
-    public void onClientConnectedToServer(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+    public void onClientStartSyncing(SyncEvent.ClientStartSyncing event) {
         CommonProxy.recordingPlayers.clear();
-        //CommonProxy.recordingPlayers.add(playerInfo);
-        //PacketHandler.instance.createPacket(new Packet1TrackingStatus(playerInfo, true));
         ModRecording.instance.sendRecordingToServer();
     }
 

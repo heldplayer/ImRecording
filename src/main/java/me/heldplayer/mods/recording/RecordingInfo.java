@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import me.heldplayer.mods.recording.client.ClientProxy;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
@@ -14,13 +15,16 @@ import net.minecraft.world.World;
 import net.specialattack.forge.core.sync.ISyncable;
 import net.specialattack.forge.core.sync.ISyncableObjectOwner;
 import net.specialattack.forge.core.sync.SInteger;
+import net.specialattack.forge.core.sync.SString;
 
 public class RecordingInfo implements ISyncableObjectOwner {
 
     public String name;
+    public UUID uuid;
     public int displayTime;
-    public boolean isInvalid;
+    private boolean isInvalid;
     private SInteger state;
+    private SString uuidStr;
     private int oldState;
     private List<ISyncable> syncables;
 
@@ -30,10 +34,12 @@ public class RecordingInfo implements ISyncableObjectOwner {
     // 2: Recording paused
     // 3: Request stop/pause recording
 
-    public RecordingInfo(String name, int state) {
+    public RecordingInfo(String name, UUID uuid, int state) {
         this.name = name;
+        this.uuid = uuid;
         this.state = new SInteger(this, state);
-        this.syncables = Arrays.asList((ISyncable) this.state);
+        this.uuidStr = new SString(this, "");
+        this.syncables = Arrays.asList((ISyncable) this.state, this.uuidStr);
     }
 
     @Override
@@ -68,7 +74,7 @@ public class RecordingInfo implements ISyncableObjectOwner {
 
     @Override
     public String toString() {
-        return "[RecordingPair: name=" + this.name + ", state=" + this.state + " ]";
+        return "[RecordingInfo: name=" + this.name + ", state=" + this.state + "]";
     }
 
     public int getState() {
@@ -170,6 +176,11 @@ public class RecordingInfo implements ISyncableObjectOwner {
     @Override
     public boolean isNotValid() {
         return this.isInvalid;
+    }
+
+    @Override
+    public void setNotValid() {
+        this.isInvalid = true;
     }
 
     @Override

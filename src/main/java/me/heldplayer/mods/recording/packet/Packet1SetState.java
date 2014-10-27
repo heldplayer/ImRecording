@@ -9,6 +9,7 @@ import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
 import net.minecraft.entity.player.EntityPlayer;
+import net.specialattack.forge.core.packet.Attributes;
 import net.specialattack.forge.core.sync.SyncHandler;
 
 public class Packet1SetState extends ImRecordingPacket {
@@ -22,6 +23,11 @@ public class Packet1SetState extends ImRecordingPacket {
     public Packet1SetState(RecordingInfo info) {
         super(null);
         this.state = info.getState();
+    }
+
+    @Override
+    public String getDebugInfo() {
+        return String.format("PacketSetState[State: %s]", this.state);
     }
 
     @Override
@@ -40,7 +46,10 @@ public class Packet1SetState extends ImRecordingPacket {
     }
 
     @Override
-    public void onData(ChannelHandlerContext context, EntityPlayer player) {
+    public void onData(ChannelHandlerContext context) {
+        this.requireAttribute(Attributes.SENDING_PLAYER);
+
+        EntityPlayer player = this.attr(Attributes.SENDING_PLAYER).get();
         RecordingInfo info = null;
 
         List<RecordingInfo> infos = CommonProxy.recordingPlayers;
@@ -53,6 +62,7 @@ public class Packet1SetState extends ImRecordingPacket {
 
                 if (this.state == 0) {
                     infos.remove(i);
+                    info.setNotValid();
                 }
 
                 info.displayTime = 0;
@@ -64,9 +74,9 @@ public class Packet1SetState extends ImRecordingPacket {
         }
 
         if (info == null && this.state != 0) {
-            info = new RecordingInfo(player.getCommandSenderName(), (byte) this.state);
+            info = new RecordingInfo(player.getCommandSenderName(), player.getUniqueID(), (byte) this.state);
 
-            SyncHandler.startTracking(info);
+            SyncHandler.Server.startTracking(info);
 
             infos.add(info);
         }
