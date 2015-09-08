@@ -59,7 +59,7 @@ public class ClientProxy extends CommonProxy {
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
 
-        Session session = MC.getMinecraft().getSession();
+        Session session = MC.getMc().getSession();
 
         ClientProxy.playerInfo = new RecordingInfo(session.func_148256_e().getId());
         ClientProxy.playerInfo.name.value = session.getUsername();

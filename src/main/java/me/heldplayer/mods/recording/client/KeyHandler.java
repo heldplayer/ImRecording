@@ -67,7 +67,7 @@ public class KeyHandler {
         if (!tickEnd) {
             return;
         }
-        Minecraft mc = MC.getMinecraft();
+        Minecraft mc = MC.getMc();
         KeyBinding kb = this.keyBindings[binding];
 
         if (mc.currentScreen != null && mc.theWorld != null && !(mc.currentScreen instanceof GuiMainMenu)) {
@@ -114,7 +114,7 @@ public class KeyHandler {
         if (!tickEnd) {
             return;
         }
-        Minecraft mc = MC.getMinecraft();
+        Minecraft mc = MC.getMc();
         KeyBinding kb = this.keyBindings[binding];
 
         if (mc.currentScreen != null && mc.theWorld != null && !(mc.currentScreen instanceof GuiMainMenu)) {
