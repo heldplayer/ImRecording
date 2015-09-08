@@ -7,16 +7,19 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import me.heldplayer.mods.recording.Assets;
 import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
 import me.heldplayer.mods.recording.client.gui.GuiOverlay;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.Session;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.specialattack.forge.core.SpACore;
 import net.specialattack.forge.core.client.MC;
+import net.specialattack.forge.core.client.texture.IconHolder;
 import net.specialattack.forge.core.event.SyncEvent;
 
 @SideOnly(Side.CLIENT)
@@ -27,11 +30,19 @@ public class ClientProxy extends CommonProxy {
     public static boolean overlayEnabled;
     public static IIcon[] icons = new IIcon[4];
 
+    public static Map<UUID, RecordingInfo> recordingPlayers = new HashMap<UUID, RecordingInfo>();
+
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
 
         ClientProxy.overlayEnabled = true;
+
+        String[] types = new String[] { "unknown", "recording", "paused", "request" };
+
+        for (int i = 0; i < types.length; i++) {
+            SpACore.registerIconHolder(ClientProxy.icons[i] = new IconHolder(Assets.DOMAIN + types[i]));
+        }
     }
 
     @Override
@@ -50,7 +61,8 @@ public class ClientProxy extends CommonProxy {
 
         Session session = MC.getMinecraft().getSession();
 
-        ClientProxy.playerInfo = new RecordingInfo(session.getUsername(), session.func_148256_e().getId(), (byte) 0);
+        ClientProxy.playerInfo = new RecordingInfo(session.func_148256_e().getId());
+        ClientProxy.playerInfo.name.value = session.getUsername();
     }
 
     @SubscribeEvent
@@ -59,22 +71,23 @@ public class ClientProxy extends CommonProxy {
     }
 
     @SubscribeEvent
-    public void onClientStartSyncing(SyncEvent.ClientStartSyncing event) {
+    public void onClientStartSyncing(SyncEvent.ClientServerInfoReceived event) {
         CommonProxy.recordingPlayers.clear();
         ModRecording.instance.sendRecordingToServer();
     }
 
-    @SubscribeEvent
-    public void onTextureStitchedPost(TextureStitchEvent.Pre event) {
-        TextureMap map = event.map;
-
-        if (map.getTextureType() == SpACore.textureMapId.getValue()) {
-            String[] types = new String[] { "unknown", "recording", "paused", "request" };
-
-            for (int i = 0; i < types.length; i++) {
-                ClientProxy.icons[i] = map.registerIcon("imrecording:" + types[i]);
-            }
+    @Override
+    public RecordingInfo getClientInfo(UUID uuid) {
+        if (ClientProxy.recordingPlayers.containsKey(uuid)) {
+            return ClientProxy.recordingPlayers.get(uuid);
         }
+        RecordingInfo result = new RecordingInfo(uuid);
+        ClientProxy.recordingPlayers.put(uuid, result);
+        return result;
     }
 
+    @Override
+    public void removeClientInfo(UUID uuid) {
+        ClientProxy.recordingPlayers.remove(uuid);
+    }
 }

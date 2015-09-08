@@ -9,14 +9,9 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.List;
 import me.heldplayer.mods.recording.client.ClientProxy;
+import me.heldplayer.mods.recording.packet.C01SetState;
 import me.heldplayer.mods.recording.packet.ImRecordingPacket;
-import me.heldplayer.mods.recording.packet.Packet1SetState;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.ServerConfigurationManager;
-import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.config.Configuration;
 import net.specialattack.forge.core.ModInfo;
 import net.specialattack.forge.core.SpACoreMod;
@@ -24,9 +19,11 @@ import net.specialattack.forge.core.SpACoreProxy;
 import net.specialattack.forge.core.config.Config;
 import net.specialattack.forge.core.config.ConfigCategory;
 import net.specialattack.forge.core.config.ConfigValue;
-import net.specialattack.forge.core.packet.PacketHandler;
+import net.specialattack.forge.core.packet.SpAPacketHandler;
+import net.specialattack.forge.core.sync.SyncObjectProvider;
+import net.specialattack.forge.core.sync.SyncServerAPI;
 
-@Mod(modid = Objects.MOD_ID, name = Objects.MOD_NAME, guiFactory = Objects.GUI_FACTORY)
+@Mod(modid = Objects.MOD_ID, name = Objects.MOD_NAME, dependencies = Objects.MOD_DEPENCIES, guiFactory = Objects.GUI_FACTORY)
 public class ModRecording extends SpACoreMod {
 
     @Instance(value = Objects.MOD_ID)
@@ -41,7 +38,9 @@ public class ModRecording extends SpACoreMod {
     public static ConfigValue<Boolean> lockOverlay;
     public static ConfigValue<Boolean> instantHide;
 
-    public static PacketHandler<ImRecordingPacket> packetHandler;
+    public static SpAPacketHandler<ImRecordingPacket> packetHandler;
+
+    public static SyncObjectProvider<RecordingInfo> syncProvider = new SyncProvider();
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
@@ -49,20 +48,22 @@ public class ModRecording extends SpACoreMod {
     public void preInit(FMLPreInitializationEvent event) {
         Objects.log = event.getModLog();
 
-        ModRecording.packetHandler = new PacketHandler<ImRecordingPacket>(Objects.MOD_CHANNEL, Packet1SetState.class);
+        ModRecording.packetHandler = new SpAPacketHandler<ImRecordingPacket>(Objects.MOD_CHANNEL, C01SetState.class);
 
         // Config
-        ConfigCategory<?> category = new ConfigCategory(Configuration.CATEGORY_GENERAL, "config.imrecording.category.general", null, "General mod settings");
-        ModRecording.screenLocation = new ConfigValue<ScreenLocation>("screenLocation", "config.imrecording.key.screenLocation", Side.CLIENT, ScreenLocation.TopRight, "Determines the location the GUI part of this mod is located in");
-        ModRecording.chatMessages = new ConfigValue<Boolean>("chatMessages", "config.imrecording.key.chatMessages", null, Boolean.TRUE, "Set this to true to broadcast a chat message to every player when a player starts recording");
-        ModRecording.lockOverlay = new ConfigValue<Boolean>("lockOverlay", "config.imrecording.key.lockOverlay", Side.CLIENT, Boolean.TRUE, "Set this to true to disable being able to change recording state when the overlay is hidden");
-        ModRecording.instantHide = new ConfigValue<Boolean>("instantHide", "config.imrecording.key.instantHide", Side.CLIENT, Boolean.FALSE, "Set this to true to instantly hide the overlay instead of fading out slowly when toggling the GUI");
+        ConfigCategory<?> category = new ConfigCategory(Configuration.CATEGORY_GENERAL, "imrecording:config.general", null);
+        ModRecording.screenLocation = new ConfigValue<ScreenLocation>("screenLocation", "imrecording:config.general.screenLocation", Side.CLIENT, ScreenLocation.TopRight);
+        ModRecording.chatMessages = new ConfigValue<Boolean>("chatMessages", "imrecording:config.general.chatMessages", null, Boolean.TRUE);
+        ModRecording.lockOverlay = new ConfigValue<Boolean>("lockOverlay", "imrecording:config.general.lockOverlay", Side.CLIENT, Boolean.TRUE);
+        ModRecording.instantHide = new ConfigValue<Boolean>("instantHide", "imrecording:config.general.instantHide", Side.CLIENT, Boolean.FALSE);
         this.config = new Config(event.getSuggestedConfigurationFile());
         this.config.addCategory(category);
         category.addValue(ModRecording.screenLocation);
         category.addValue(ModRecording.chatMessages);
         category.addValue(ModRecording.lockOverlay);
         category.addValue(ModRecording.instantHide);
+
+        SyncServerAPI.registerProvider(ModRecording.syncProvider);
 
         super.preInit(event);
     }
@@ -87,56 +88,10 @@ public class ModRecording extends SpACoreMod {
         CommonProxy.recordingPlayers.clear();
     }
 
-    @SuppressWarnings("unchecked")
-    public void broadcastRecorders() {
-        ServerConfigurationManager configManager = MinecraftServer.getServer().getConfigurationManager();
-
-        List<EntityPlayerMP> players = configManager.playerEntityList;
-
-        for (EntityPlayerMP player : players) {
-            this.sendPlayersToPlayer(player);
-        }
-    }
-
-    public void sendPlayersToPlayer(EntityPlayerMP player) {
-        RecordingInfo[] players = new RecordingInfo[CommonProxy.recordingPlayers.size()];
-
-        if (ModRecording.chatMessages.getValue()) {
-            for (int i = 0; i < players.length; i++) {
-                players[i] = CommonProxy.recordingPlayers.get(i);
-
-                String message = players[i].getRecordingString(true);
-                if (message != null) {
-                    player.addChatComponentMessage(new ChatComponentText(message));
-                }
-
-                //SyncHandler.startTracking(players[i], player);
-            }
-
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    public void sendPlayerToPlayers(RecordingInfo info) {
-        ServerConfigurationManager configManager = MinecraftServer.getServer().getConfigurationManager();
-
-        List<EntityPlayerMP> players = configManager.playerEntityList;
-
-        if (ModRecording.chatMessages.getValue()) {
-            String message = info.getRecordingString(false);
-
-            if (message != null) {
-                for (EntityPlayerMP player : players) {
-                    player.addChatComponentMessage(new ChatComponentText(message));
-                }
-            }
-        }
-    }
-
     @SideOnly(Side.CLIENT)
     public void sendRecordingToServer() {
-        Packet1SetState packet = new Packet1SetState(ClientProxy.playerInfo);
-        ModRecording.packetHandler.sendPacketToServer(packet);
+        C01SetState packet = new C01SetState(ClientProxy.playerInfo);
+        ModRecording.packetHandler.sendToServer(packet);
     }
 
 }

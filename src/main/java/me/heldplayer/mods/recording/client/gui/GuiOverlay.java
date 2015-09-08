@@ -2,8 +2,7 @@ package me.heldplayer.mods.recording.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.ArrayList;
-import me.heldplayer.mods.recording.CommonProxy;
+import java.util.Collection;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
 import me.heldplayer.mods.recording.ScreenLocation;
@@ -27,7 +26,7 @@ public class GuiOverlay extends Gui {
     }
 
     public void tick() {
-        ArrayList<RecordingInfo> players = CommonProxy.recordingPlayers;
+        Collection<RecordingInfo> players = ClientProxy.recordingPlayers.values();
 
         for (RecordingInfo info : players) {
             if (!ModRecording.instantHide.getValue() && !ClientProxy.overlayEnabled) {
@@ -59,32 +58,25 @@ public class GuiOverlay extends Gui {
         int x = alignRight ? width - 1 : 10;
         int y = alignBottom ? height - 10 : 1;
 
-        ArrayList<RecordingInfo> players = CommonProxy.recordingPlayers;
+        Collection<RecordingInfo> players = ClientProxy.recordingPlayers.values();
 
         RecordingInfo[] playerArray = new RecordingInfo[players.size()];
 
-        for (int i = 0; i < playerArray.length && i < players.size(); i++) {
-            playerArray[i] = players.get(i);
-
-            if (playerArray[i] == null) {
+        int i = 0;
+        for (RecordingInfo info : players) {
+            if (info == null || info.getState() == 0) {
                 continue;
             }
 
-            if (playerArray[i].getState() == 0 || playerArray[i].isNotValid()) {
-                players.remove(i);
-                playerArray[i] = null;
-                i--;
+            if ((info.displayTime >= 200 || ModRecording.instantHide.getValue()) && !ClientProxy.overlayEnabled) {
                 continue;
             }
 
-            if ((playerArray[i].displayTime >= 200 || ModRecording.instantHide.getValue()) && !ClientProxy.overlayEnabled) {
-                playerArray[i] = null;
-                continue;
-            }
+            playerArray[i++] = info;
 
             if (alignRight) {
-                if (width - 1 - this.font.getStringWidth(playerArray[i].name) < x) {
-                    x = width - 1 - this.font.getStringWidth(playerArray[i].name);
+                if (width - 1 - this.font.getStringWidth(info.name.value) < x) {
+                    x = width - 1 - this.font.getStringWidth(info.name.value);
                 }
             }
         }
@@ -109,7 +101,7 @@ public class GuiOverlay extends Gui {
                     tes.draw();
                 }
 
-                this.font.drawStringWithShadow(player.name, x, y, color);
+                this.font.drawStringWithShadow(player.name.value, x, y, color);
 
                 if (alignBottom) {
                     y -= 9;
@@ -132,7 +124,7 @@ public class GuiOverlay extends Gui {
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, (((color >> 24) & 0xFF) / 255.0F));
 
-            x = alignRight ? width - 1 - this.font.getStringWidth(player.name) : 10;
+            x = alignRight ? width - 1 - this.font.getStringWidth(player.name.value) : 10;
             y = alignBottom ? height - 10 : 1;
 
             IIcon icon = ClientProxy.icons[player.getState()];
@@ -147,7 +139,7 @@ public class GuiOverlay extends Gui {
                 tes.draw();
             }
 
-            this.font.drawStringWithShadow(player.name, x, y, color);
+            this.font.drawStringWithShadow(player.name.value, x, y, color);
         }
     }
 }

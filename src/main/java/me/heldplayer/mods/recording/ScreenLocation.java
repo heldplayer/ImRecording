@@ -11,15 +11,15 @@ public enum ScreenLocation implements IConfigurable {
     public static final String[] validValues;
 
     static {
-        validValues = new String[values().length];
-        for (int i = 0; i < validValues.length; i++) {
-            validValues[i] = values()[i].name;
+        validValues = new String[ScreenLocation.values().length];
+        for (int i = 0; i < ScreenLocation.validValues.length; i++) {
+            ScreenLocation.validValues[i] = ScreenLocation.values()[i].name;
         }
     }
 
     public final String name;
 
-    private ScreenLocation(String name) {
+    ScreenLocation(String name) {
         this.name = name;
     }
 
@@ -51,7 +51,7 @@ public enum ScreenLocation implements IConfigurable {
 
     @Override
     public String[] getValidValues() {
-        return validValues;
+        return ScreenLocation.validValues;
     }
 
     @Override

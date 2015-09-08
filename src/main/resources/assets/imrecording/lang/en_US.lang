@@ -1,10 +1,24 @@
-config.imrecording.category.general=General
-config.imrecording.key.screenLocation=Overlay Location
-config.imrecording.key.chatMessages=Show chat messages
-config.imrecording.key.lockOverlay=Lock on hidden
-config.imrecording.key.instantHide=Hide instantly
+imrecording:config.general=General
+imrecording:config.general.comment=General mod settings
+imrecording:config.general.screenLocation=Overlay Location
+imrecording:config.general.screenLocation.comment=Determines the location the GUI part of this mod is located in
+imrecording:config.general.chatMessages=Show chat messages
+imrecording:config.general.chatMessages.comment=Set this to true to broadcast a chat message to every player when a player starts recording
+imrecording:config.general.lockOverlay=Lock on hidden
+imrecording:config.general.lockOverlay.comment=Set this to true to disable being able to change recording state when the overlay is hidden
+imrecording:config.general.instantHide=Hide instantly
+imrecording:config.general.instantHide.comment=Set this to true to instantly hide the overlay instead of fading out slowly when toggling the GUI
 
 key.categories.imrecording=I'm Recording Mod
 key.overlay=Toggle Overlay
 key.pause=Toggle Pause state
 key.recording=Toggle Recording state
+
+imrecording:state.recording=%1$s has started recording
+imrecording:state.recording.connect=%1$s is recording
+imrecording:state.recording.resume=%1$s has resumed recording
+imrecording:state.recording.stopped=%1$s has stopped recording
+imrecording:state.paused=%1$s has paused recording
+imrecording:state.paused.connect=%1$s was recording but paused
+imrecording:state.halt=%1$s is requesting to halt recording
+imrecording:state.halt.stopped=%1$s is no longer requesting to halt recording

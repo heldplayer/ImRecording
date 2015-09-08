@@ -11,11 +11,7 @@
             "authorList" : [
                 "heldplayer"
             ],
-            "url" : "http://www.minecraftforge.net/forum/index.php/topic,2553.0.html",
-            "useDependencyInformation" : true,
-            "requiredMods" : [ "spacoreforge", "spacore" ],
-            "dependencies" : [ "spacore" ],
-            "dependants" : []
+            "url": "http://www.minecraftforge.net/forum/index.php/topic,2553.0.html"
         }
     ]
 }

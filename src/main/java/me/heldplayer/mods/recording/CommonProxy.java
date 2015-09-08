@@ -5,21 +5,26 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.MinecraftForge;
+import net.specialattack.forge.core.Objects;
 import net.specialattack.forge.core.SpACoreProxy;
 import net.specialattack.forge.core.event.SyncEvent;
 import net.specialattack.forge.core.sync.SyncHandler;
+import net.specialattack.util.PlayerUtils;
 
 public class CommonProxy extends SpACoreProxy {
 
-    public static ArrayList<RecordingInfo> recordingPlayers = new ArrayList<RecordingInfo>();
+    public static Map<UUID, RecordingInfo> recordingPlayers = new LinkedHashMap<UUID, RecordingInfo>();
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
         FMLCommonHandler.instance().bus().register(this);
+        Objects.SYNC_EVENT_BUS.register(this);
     }
 
     @Override
@@ -31,43 +36,31 @@ public class CommonProxy extends SpACoreProxy {
     }
 
     @SubscribeEvent
-    public void onSyncRequestObject(SyncEvent.RequestObject event) {
-        if (event.identifier.startsWith("RecordingInfo_")) {
-            String name = event.identifier.substring(14);
+    public void onSyncServerConnectionSetup(SyncEvent.ServerConnectionSetup event) {
+        UUID uuid = event.connection.getUuid();
+        EntityPlayerMP player = PlayerUtils.getServerPlayer(uuid);
 
-            for (RecordingInfo info : CommonProxy.recordingPlayers) {
-                if (info.name.equalsIgnoreCase(name)) {
-                    event.result = info;
-                    return;
-                }
-            }
+        RecordingInfo info = new RecordingInfo(uuid);
+        info.name.value = player.getCommandSenderName();
+        CommonProxy.recordingPlayers.put(uuid, info);
 
-            RecordingInfo info = new RecordingInfo(name, null, 0);
-            CommonProxy.recordingPlayers.add(info);
-            event.result = info;
-        }
+        SyncHandler.globalStorage.registerSyncableOwner(info);
     }
 
     @SubscribeEvent
-    public void onSyncStartTracking(SyncEvent.StartTracking event) {
-        EntityPlayerMP player = event.tracker.getPlayer();
-
-        ModRecording.instance.sendPlayersToPlayer(player);
-
-        for (RecordingInfo info : CommonProxy.recordingPlayers) {
-            SyncHandler.Server.startTracking(info, player);
-        }
+    public void onSyncServerClientDisconnected(SyncEvent.ServerClientDisconnected event) {
+        SyncHandler.globalStorage.unregisterSyncableOwner(CommonProxy.recordingPlayers.remove(event.connection.getUuid()));
     }
 
     @SubscribeEvent
-    public void onSyncStopTracking(SyncEvent.StopTracking event) {
-        ArrayList<RecordingInfo> playerInfos = CommonProxy.recordingPlayers;
-
-        for (RecordingInfo info : playerInfos) {
-            if (event.tracker.uuid.equals(info.uuid)) {
-                info.setNotValid();
-            }
-        }
+    public void onSyncServerStopped(SyncEvent.ServerStopped event) {
+        CommonProxy.recordingPlayers.clear();
     }
 
+    public RecordingInfo getClientInfo(UUID uuid) {
+        return null;
+    }
+
+    public void removeClientInfo(UUID uuid) {
+    }
 }

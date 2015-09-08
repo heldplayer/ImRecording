@@ -7,7 +7,6 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import java.util.ArrayList;
 import me.heldplayer.mods.recording.CommonProxy;
 import me.heldplayer.mods.recording.ModRecording;
 import me.heldplayer.mods.recording.RecordingInfo;
@@ -78,9 +77,7 @@ public class KeyHandler {
         if (kb == this.overlayToggle) {
             ClientProxy.overlayEnabled = !ClientProxy.overlayEnabled;
 
-            ArrayList<RecordingInfo> players = CommonProxy.recordingPlayers;
-
-            for (RecordingInfo info : players) {
+            for (RecordingInfo info : CommonProxy.recordingPlayers.values()) {
                 info.displayTime = 0;
             }
         }
