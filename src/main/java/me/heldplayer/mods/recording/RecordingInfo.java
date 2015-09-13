@@ -205,5 +205,4 @@ public class RecordingInfo implements ISyncableOwner {
                 return EnumChatFormatting.GRAY;
         }
     }
-
 }

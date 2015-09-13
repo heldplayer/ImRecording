@@ -82,7 +82,7 @@ public class KeyHandler {
             }
         }
 
-        if (!ClientProxy.overlayEnabled && ModRecording.lockOverlay.getValue()) {
+        if (!ClientProxy.overlayEnabled && ModRecording.config.lockOverlay) {
             return;
         }
 
@@ -121,7 +121,7 @@ public class KeyHandler {
             return;
         }
 
-        if (!ClientProxy.overlayEnabled && ModRecording.lockOverlay.getValue()) {
+        if (!ClientProxy.overlayEnabled && ModRecording.config.lockOverlay) {
             return;
         }
 
@@ -151,5 +151,4 @@ public class KeyHandler {
             }
         }
     }
-
 }

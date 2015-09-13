@@ -53,5 +53,4 @@ public class C01SetState extends ImRecordingPacket {
 
         info.setState(this.state);
     }
-
 }

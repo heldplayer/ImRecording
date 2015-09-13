@@ -1,13 +1,13 @@
-imrecording:config.general=General
-imrecording:config.general.comment=General mod settings
-imrecording:config.general.screenLocation=Overlay Location
-imrecording:config.general.screenLocation.comment=Determines the location the GUI part of this mod is located in
-imrecording:config.general.chatMessages=Show chat messages
-imrecording:config.general.chatMessages.comment=Set this to true to broadcast a chat message to every player when a player starts recording
-imrecording:config.general.lockOverlay=Lock on hidden
-imrecording:config.general.lockOverlay.comment=Set this to true to disable being able to change recording state when the overlay is hidden
-imrecording:config.general.instantHide=Hide instantly
-imrecording:config.general.instantHide.comment=Set this to true to instantly hide the overlay instead of fading out slowly when toggling the GUI
+imrecording.cfg:general=General
+imrecording.cfg:general.comment=General mod settings
+imrecording.cfg:general.screenLocation=Overlay Location
+imrecording.cfg:general.screenLocation.comment=Determines the location the GUI part of this mod is located in
+imrecording.cfg:general.chatMessages=Show chat messages
+imrecording.cfg:general.chatMessages.comment=Set this to true to broadcast a chat message to every player when a player starts recording
+imrecording.cfg:general.lockOverlay=Lock on hidden
+imrecording.cfg:general.lockOverlay.comment=Set this to true to disable being able to change recording state when the overlay is hidden
+imrecording.cfg:general.instantHide=Hide instantly
+imrecording.cfg:general.instantHide.comment=Set this to true to instantly hide the overlay instead of fading out slowly when toggling the GUI
 
 key.categories.imrecording=I'm Recording Mod
 key.overlay=Toggle Overlay

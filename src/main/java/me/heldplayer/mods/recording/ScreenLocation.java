@@ -1,8 +1,6 @@
 package me.heldplayer.mods.recording;
 
-import net.specialattack.forge.core.config.IConfigurable;
-
-public enum ScreenLocation implements IConfigurable {
+public enum ScreenLocation {
 
     TopLeft("top-left"),
     TopRight("top-right"),
@@ -34,29 +32,7 @@ public enum ScreenLocation implements IConfigurable {
     }
 
     @Override
-    public String serialize() {
-        return this.name;
-    }
-
-    @Override
-    public IConfigurable load(String serialized) {
-        for (ScreenLocation loc : ScreenLocation.values()) {
-            if (loc.name.equalsIgnoreCase(serialized)) {
-                return loc;
-            }
-        }
-
-        return null;
-    }
-
-    @Override
-    public String[] getValidValues() {
-        return ScreenLocation.validValues;
-    }
-
-    @Override
     public String toString() {
         return this.name;
     }
-
 }

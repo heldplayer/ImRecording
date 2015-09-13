@@ -49,5 +49,4 @@ public class TickHandler {
             ClientProxy.overlay.drawScreen(mc, resolution, false);
         }
     }
-
 }

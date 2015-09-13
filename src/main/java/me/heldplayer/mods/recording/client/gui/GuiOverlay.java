@@ -29,7 +29,7 @@ public class GuiOverlay extends Gui {
         Collection<RecordingInfo> players = ClientProxy.recordingPlayers.values();
 
         for (RecordingInfo info : players) {
-            if (!ModRecording.instantHide.getValue() && !ClientProxy.overlayEnabled) {
+            if (!ModRecording.config.instantHide && !ClientProxy.overlayEnabled) {
                 if (info.displayTime > 200) {
                     info.displayTime = 200;
                 } else {
@@ -51,7 +51,7 @@ public class GuiOverlay extends Gui {
         int width = resolution.getScaledWidth();
         int height = resolution.getScaledHeight();
 
-        ScreenLocation location = ModRecording.screenLocation.getValue();
+        ScreenLocation location = ScreenLocation.fromString(ModRecording.config.screenLocation);
         boolean alignRight = (location == ScreenLocation.TopRight || location == ScreenLocation.BottomRight);
         boolean alignBottom = (location == ScreenLocation.BottomLeft || location == ScreenLocation.BottomRight);
 
@@ -68,7 +68,7 @@ public class GuiOverlay extends Gui {
                 continue;
             }
 
-            if ((info.displayTime >= 200 || ModRecording.instantHide.getValue()) && !ClientProxy.overlayEnabled) {
+            if ((info.displayTime >= 200 || ModRecording.config.instantHide) && !ClientProxy.overlayEnabled) {
                 continue;
             }
 
