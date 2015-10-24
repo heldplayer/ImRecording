@@ -11,7 +11,7 @@ public final class Objects {
     public static final String MOD_ID = "imrecording";
     public static final String MOD_NAME = "I'm Recording Mod";
     public static final ModInfo MOD_INFO = new ModInfo(Objects.MOD_ID, Objects.MOD_NAME);
-    public static final String MOD_DEPENCIES = "required-after:spacore@[01.05.09,)";
+    public static final String MOD_DEPENCIES = "required-after:spacore@[01.05.11,)";
     public static final String MOD_CHANNEL = "ImRecording";
     public static final String CLIENT_PROXY = "me.heldplayer.mods.recording.client.ClientProxy";
     public static final String SERVER_PROXY = "me.heldplayer.mods.recording.CommonProxy";
