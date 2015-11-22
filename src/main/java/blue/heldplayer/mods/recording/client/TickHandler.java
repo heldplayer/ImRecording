@@ -1,17 +1,16 @@
-package me.heldplayer.mods.recording.client;
+package blue.heldplayer.mods.recording.client;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.specialattack.forge.core.client.MC;
 
 @SideOnly(Side.CLIENT)
@@ -24,14 +23,14 @@ public class TickHandler {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == Phase.END) {
+        if (event.phase == TickEvent.Phase.END) {
             ClientProxy.overlay.tick();
         }
     }
 
     @SubscribeEvent
     public void onRenderTick(TickEvent.RenderTickEvent event) {
-        if (event.phase == Phase.END) {
+        if (event.phase == TickEvent.Phase.END) {
             Minecraft mc = MC.getMc();
             ScaledResolution resolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
 

@@ -1,4 +1,4 @@
-package me.heldplayer.mods.recording;
+package blue.heldplayer.mods.recording;
 
 public enum ScreenLocation {
 

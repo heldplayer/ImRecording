@@ -1,4 +1,4 @@
-package me.heldplayer.mods.recording;
+package blue.heldplayer.mods.recording;
 
 import java.util.UUID;
 import net.minecraft.nbt.NBTTagCompound;

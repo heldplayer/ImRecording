@@ -1,14 +1,14 @@
-package me.heldplayer.mods.recording;
+package blue.heldplayer.mods.recording;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import blue.heldplayer.mods.recording.client.ClientProxy;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import me.heldplayer.mods.recording.client.ClientProxy;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.util.*;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.specialattack.forge.core.client.MC;
 import net.specialattack.forge.core.sync.ISyncable;
 import net.specialattack.forge.core.sync.ISyncableOwner;

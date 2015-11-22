@@ -1,18 +1,17 @@
-package me.heldplayer.mods.recording.client;
+package blue.heldplayer.mods.recording.client;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import me.heldplayer.mods.recording.CommonProxy;
-import me.heldplayer.mods.recording.ModRecording;
-import me.heldplayer.mods.recording.RecordingInfo;
+import blue.heldplayer.mods.recording.CommonProxy;
+import blue.heldplayer.mods.recording.ModRecording;
+import blue.heldplayer.mods.recording.RecordingInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.specialattack.forge.core.client.MC;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -41,7 +40,7 @@ public class KeyHandler {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        this.keyTick(event.type, event.phase == Phase.END);
+        this.keyTick(event.type, event.phase == TickEvent.Phase.END);
     }
 
     private void keyTick(TickEvent.Type type, boolean tickEnd) {

@@ -1,22 +1,22 @@
-package me.heldplayer.mods.recording.client;
+package blue.heldplayer.mods.recording.client;
 
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.FMLNetworkEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import blue.heldplayer.mods.recording.Assets;
+import blue.heldplayer.mods.recording.CommonProxy;
+import blue.heldplayer.mods.recording.ModRecording;
+import blue.heldplayer.mods.recording.RecordingInfo;
+import blue.heldplayer.mods.recording.client.gui.GuiOverlay;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import me.heldplayer.mods.recording.Assets;
-import me.heldplayer.mods.recording.CommonProxy;
-import me.heldplayer.mods.recording.ModRecording;
-import me.heldplayer.mods.recording.RecordingInfo;
-import me.heldplayer.mods.recording.client.gui.GuiOverlay;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Session;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.specialattack.forge.core.SpACore;
 import net.specialattack.forge.core.client.MC;
 import net.specialattack.forge.core.client.texture.IconHolder;
@@ -28,7 +28,7 @@ public class ClientProxy extends CommonProxy {
     public static GuiOverlay overlay;
     public static RecordingInfo playerInfo;
     public static boolean overlayEnabled;
-    public static IIcon[] icons = new IIcon[4];
+    public static TextureAtlasSprite[] icons = new TextureAtlasSprite[4];
 
     public static Map<UUID, RecordingInfo> recordingPlayers = new HashMap<UUID, RecordingInfo>();
 
@@ -61,7 +61,7 @@ public class ClientProxy extends CommonProxy {
 
         Session session = MC.getMc().getSession();
 
-        ClientProxy.playerInfo = new RecordingInfo(session.func_148256_e().getId());
+        ClientProxy.playerInfo = new RecordingInfo(session.getProfile().getId());
         ClientProxy.playerInfo.name.value = session.getUsername();
     }
 

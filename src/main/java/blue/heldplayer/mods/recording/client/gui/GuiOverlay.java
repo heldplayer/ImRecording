@@ -1,18 +1,18 @@
-package me.heldplayer.mods.recording.client.gui;
+package blue.heldplayer.mods.recording.client.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import blue.heldplayer.mods.recording.ModRecording;
+import blue.heldplayer.mods.recording.RecordingInfo;
+import blue.heldplayer.mods.recording.ScreenLocation;
+import blue.heldplayer.mods.recording.client.ClientProxy;
 import java.util.Collection;
-import me.heldplayer.mods.recording.ModRecording;
-import me.heldplayer.mods.recording.RecordingInfo;
-import me.heldplayer.mods.recording.ScreenLocation;
-import me.heldplayer.mods.recording.client.ClientProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.specialattack.forge.core.client.MC;
 import org.lwjgl.opengl.GL11;
 
@@ -46,7 +46,7 @@ public class GuiOverlay extends Gui {
     }
 
     public void drawScreen(Minecraft mc, ScaledResolution resolution, boolean disableOpcaity) {
-        GL11.glEnable(GL11.GL_BLEND);
+        GlStateManager.enableBlend();
 
         int width = resolution.getScaledWidth();
         int height = resolution.getScaledHeight();
@@ -87,18 +87,21 @@ public class GuiOverlay extends Gui {
 
                 mc.renderEngine.bindTexture(net.specialattack.forge.core.Assets.TEXTURE_MAP);
 
-                GL11.glColor4f(1.0F, 1.0F, 1.0F, (((color >> 24) & 0xFF) / 255.0F));
+                GlStateManager.color(1.0F, 1.0F, 1.0F, (((color >> 24) & 0xFF) / 255.0F));
 
-                IIcon icon = ClientProxy.icons[player.getState()];
+                TextureAtlasSprite icon = ClientProxy.icons[player.getState()];
 
                 if (icon != null) {
-                    Tessellator tes = Tessellator.instance;
-                    tes.startDrawingQuads();
-                    tes.addVertexWithUV(x - 9.0D, y + 8.0D, 0.0D, icon.getMinU(), icon.getMaxV());
-                    tes.addVertexWithUV(x - 1.0D, y + 8.0D, 0.0D, icon.getMaxU(), icon.getMaxV());
-                    tes.addVertexWithUV(x - 1.0D, y, 0.0D, icon.getMaxU(), icon.getMinV());
-                    tes.addVertexWithUV(x - 9.0D, y, 0.0D, icon.getMinU(), icon.getMinV());
-                    tes.draw();
+                    GL11.glBegin(GL11.GL_QUADS);
+                    GL11.glTexCoord2d(icon.getMinU(), icon.getMaxV());
+                    GL11.glVertex3d(x - 9.0D, y + 8.0D, 0.0D);
+                    GL11.glTexCoord2d(icon.getMaxU(), icon.getMaxV());
+                    GL11.glVertex3d(x - 1.0D, y + 8.0D, 0.0D);
+                    GL11.glTexCoord2d(icon.getMaxU(), icon.getMinV());
+                    GL11.glVertex3d(x - 1.0D, y, 0.0D);
+                    GL11.glTexCoord2d(icon.getMinU(), icon.getMinV());
+                    GL11.glVertex3d(x - 9.0D, y, 0.0D);
+                    GL11.glEnd();
                 }
 
                 this.font.drawStringWithShadow(player.name.value, x, y, color);
@@ -122,21 +125,24 @@ public class GuiOverlay extends Gui {
 
             mc.renderEngine.bindTexture(net.specialattack.forge.core.Assets.TEXTURE_MAP);
 
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, (((color >> 24) & 0xFF) / 255.0F));
+            GlStateManager.color(1.0F, 1.0F, 1.0F, (((color >> 24) & 0xFF) / 255.0F));
 
             x = alignRight ? width - 1 - this.font.getStringWidth(player.name.value) : 10;
             y = alignBottom ? height - 10 : 1;
 
-            IIcon icon = ClientProxy.icons[player.getState()];
+            TextureAtlasSprite icon = ClientProxy.icons[player.getState()];
 
             if (icon != null) {
-                Tessellator tes = Tessellator.instance;
-                tes.startDrawingQuads();
-                tes.addVertexWithUV(x - 9.0D, y + 8.0D, 0.0D, icon.getMinU(), icon.getMaxV());
-                tes.addVertexWithUV(x - 1.0D, y + 8.0D, 0.0D, icon.getMaxU(), icon.getMaxV());
-                tes.addVertexWithUV(x - 1.0D, y, 0.0D, icon.getMaxU(), icon.getMinV());
-                tes.addVertexWithUV(x - 9.0D, y, 0.0D, icon.getMinU(), icon.getMinV());
-                tes.draw();
+                GL11.glBegin(GL11.GL_QUADS);
+                GL11.glTexCoord2d(icon.getMinU(), icon.getMaxV());
+                GL11.glVertex3d(x - 9.0D, y + 8.0D, 0.0D);
+                GL11.glTexCoord2d(icon.getMaxU(), icon.getMaxV());
+                GL11.glVertex3d(x - 1.0D, y + 8.0D, 0.0D);
+                GL11.glTexCoord2d(icon.getMaxU(), icon.getMinV());
+                GL11.glVertex3d(x - 1.0D, y, 0.0D);
+                GL11.glTexCoord2d(icon.getMinU(), icon.getMinV());
+                GL11.glVertex3d(x - 9.0D, y, 0.0D);
+                GL11.glEnd();
             }
 
             this.font.drawStringWithShadow(player.name.value, x, y, color);

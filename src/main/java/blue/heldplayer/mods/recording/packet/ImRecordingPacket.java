@@ -1,4 +1,4 @@
-package me.heldplayer.mods.recording.packet;
+package blue.heldplayer.mods.recording.packet;
 
 import net.specialattack.forge.core.packet.SpAPacket;
 

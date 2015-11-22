@@ -1,11 +1,11 @@
-package me.heldplayer.mods.recording.packet;
+package blue.heldplayer.mods.recording.packet;
 
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
+import blue.heldplayer.mods.recording.CommonProxy;
+import blue.heldplayer.mods.recording.RecordingInfo;
 import io.netty.buffer.ByteBuf;
-import me.heldplayer.mods.recording.CommonProxy;
-import me.heldplayer.mods.recording.RecordingInfo;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class C01SetState extends ImRecordingPacket {
 

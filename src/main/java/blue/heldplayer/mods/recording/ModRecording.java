@@ -1,16 +1,14 @@
-package me.heldplayer.mods.recording;
+package blue.heldplayer.mods.recording;
 
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartedEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import me.heldplayer.mods.recording.client.ClientProxy;
-import me.heldplayer.mods.recording.packet.C01SetState;
-import me.heldplayer.mods.recording.packet.ImRecordingPacket;
+import blue.heldplayer.mods.recording.client.ClientProxy;
+import blue.heldplayer.mods.recording.packet.C01SetState;
+import blue.heldplayer.mods.recording.packet.ImRecordingPacket;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.specialattack.forge.core.ModInfo;
 import net.specialattack.forge.core.SpACoreMod;
 import net.specialattack.forge.core.SpACoreProxy;
@@ -23,7 +21,7 @@ import net.specialattack.forge.core.sync.SyncServerAPI;
 @Mod(modid = Objects.MOD_ID, name = Objects.MOD_NAME, dependencies = Objects.MOD_DEPENCIES, guiFactory = Objects.GUI_FACTORY)
 public class ModRecording extends SpACoreMod {
 
-    @Instance(value = Objects.MOD_ID)
+    @Mod.Instance(value = Objects.MOD_ID)
     public static ModRecording instance;
 
     @SidedProxy(clientSide = Objects.CLIENT_PROXY, serverSide = Objects.SERVER_PROXY)
@@ -55,7 +53,7 @@ public class ModRecording extends SpACoreMod {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    @EventHandler
+    @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         Objects.log = event.getModLog();
 
@@ -74,11 +72,11 @@ public class ModRecording extends SpACoreMod {
     }
 
     @Override
-    public SpACoreProxy getProxy() {
-        return ModRecording.proxy;
+    public SpACoreProxy[] getProxies() {
+        return new SpACoreProxy[] { ModRecording.proxy };
     }
 
-    @EventHandler
+    @Mod.EventHandler
     public void serverStarted(FMLServerStartedEvent event) {
         CommonProxy.recordingPlayers.clear();
     }
