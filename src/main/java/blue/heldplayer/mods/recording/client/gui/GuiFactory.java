@@ -17,12 +17,12 @@ public class GuiFactory implements IModGuiFactory {
     }
 
     @Override
-    public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
+    public Set<IModGuiFactory.RuntimeOptionCategoryElement> runtimeGuiCategories() {
         return null;
     }
 
     @Override
-    public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
+    public IModGuiFactory.RuntimeOptionGuiHandler getHandlerFor(IModGuiFactory.RuntimeOptionCategoryElement element) {
         return null;
     }
 }

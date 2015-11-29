@@ -8,7 +8,6 @@ import blue.heldplayer.mods.recording.client.gui.GuiOverlay;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Session;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -28,7 +27,7 @@ public class ClientProxy extends CommonProxy {
     public static GuiOverlay overlay;
     public static RecordingInfo playerInfo;
     public static boolean overlayEnabled;
-    public static TextureAtlasSprite[] icons = new TextureAtlasSprite[4];
+    public static IconHolder[] icons = new IconHolder[4];
 
     public static Map<UUID, RecordingInfo> recordingPlayers = new HashMap<UUID, RecordingInfo>();
 

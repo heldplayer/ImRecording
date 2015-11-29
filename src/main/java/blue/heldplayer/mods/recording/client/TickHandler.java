@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -42,7 +41,7 @@ public class TickHandler {
 
     @SubscribeEvent(receiveCanceled = true)
     public void renderGameOverlay(RenderGameOverlayEvent.Pre event) {
-        if (event.type == ElementType.PORTAL) {
+        if (event.type == RenderGameOverlayEvent.ElementType.PORTAL) {
             Minecraft mc = MC.getMc();
             ScaledResolution resolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
             ClientProxy.overlay.drawScreen(mc, resolution, false);

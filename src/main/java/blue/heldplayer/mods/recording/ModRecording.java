@@ -27,7 +27,7 @@ public class ModRecording extends SpACoreMod {
     @SidedProxy(clientSide = Objects.CLIENT_PROXY, serverSide = Objects.SERVER_PROXY)
     public static CommonProxy proxy;
 
-    public static Config config;
+    public static ModRecording.Config config;
     public static ConfigManager configManager;
 
     @Configuration("imrecording.cfg")
@@ -57,7 +57,7 @@ public class ModRecording extends SpACoreMod {
     public void preInit(FMLPreInitializationEvent event) {
         Objects.log = event.getModLog();
 
-        ModRecording.configManager = ConfigManager.registerConfig(ModRecording.config = new Config());
+        ModRecording.configManager = ConfigManager.registerConfig(ModRecording.config = new ModRecording.Config());
 
         ModRecording.packetHandler = new SpAPacketHandler<ImRecordingPacket>(Objects.MOD_CHANNEL, C01SetState.class);
 

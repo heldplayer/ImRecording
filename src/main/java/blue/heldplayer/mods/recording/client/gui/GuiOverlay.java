@@ -10,10 +10,10 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.specialattack.forge.core.client.MC;
+import net.specialattack.forge.core.client.texture.IconHolder;
 import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
@@ -89,7 +89,7 @@ public class GuiOverlay extends Gui {
 
                 GlStateManager.color(1.0F, 1.0F, 1.0F, (((color >> 24) & 0xFF) / 255.0F));
 
-                TextureAtlasSprite icon = ClientProxy.icons[player.getState()];
+                IconHolder icon = ClientProxy.icons[player.getState()];
 
                 if (icon != null) {
                     GL11.glBegin(GL11.GL_QUADS);
@@ -130,7 +130,7 @@ public class GuiOverlay extends Gui {
             x = alignRight ? width - 1 - this.font.getStringWidth(player.name.value) : 10;
             y = alignBottom ? height - 10 : 1;
 
-            TextureAtlasSprite icon = ClientProxy.icons[player.getState()];
+            IconHolder icon = ClientProxy.icons[player.getState()];
 
             if (icon != null) {
                 GL11.glBegin(GL11.GL_QUADS);

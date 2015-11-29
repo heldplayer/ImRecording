@@ -1,6 +1,16 @@
-plugins {
-    id "net.minecraftforge.gradle.forge" version "2.0.2"
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.0-SNAPSHOT'
+    }
 }
+apply plugin: 'net.minecraftforge.gradle.forge'
 
 repositories {
     ivy {
@@ -48,6 +58,7 @@ minecraft {
     version = minecraft_version + "-" + forge_version
     runDir = "../../jar"
     mappings = "snapshot_20141130"
+    useDepAts = true
 
     if (project.hasProperty("signature"))
         replace "@FINGERPRINT@", project.signature
